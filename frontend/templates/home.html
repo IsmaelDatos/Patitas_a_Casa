@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Patitas a casa
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
+ </head>
+ <body class="bg-gray-100 font-roboto">
+  {% if messages %}
+  <div class="fixed top-0 left-0 right-0 z-50">
+    {% for message in messages %}
+    <div class="p-4 {{ message.tags }} bg-{{ message.tags }}-100 border-l-4 border-{{ message.tags }}-500 text-{{ message.tags }}-700">
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  
+  <nav class="bg-indigo-900 p-4 flex justify-between items-center">
+   <div class="flex items-center">
+    <img alt="Logo of a dog" class="rounded-full" height="40" src="https://drive.google.com/file/d/1HkxirLpGyEtcpanRKWpOh1tBUTSqP5NO/view?usp=drive_link"/>
+    <span class="text-white text-xl font-bold ml-2">
+     Patitas a casa
+    </span>
+   </div>
+   <div class="flex space-x-4">
+    <a class="text-white px-3 py-2 rounded-md text-sm font-medium bg-indigo-700" href="{% url 'home' %}">
+     Principal
+    </a>
+    <a class="text-white px-3 py-2 rounded-md text-sm font-medium" href="#">
+     About
+    </a>
+    <a class="text-white px-3 py-2 rounded-md text-sm font-medium" href="#">
+     Adoptar
+    </a>
+    <a class="text-white px-3 py-2 rounded-md text-sm font-medium" href="{% url 'avistamiento_router' %}">
+     Reportar
+    </a>
+    {% if user.is_authenticated %}
+    <a class="text-white px-3 py-2 rounded-md text-sm font-medium" href="#">
+     <i class="fas fa-user"></i> {{ user.username }}
+    </a>
+    {% else %}
+    <a class="text-white px-3 py-2 rounded-md text-sm font-medium" href="#">
+     <i class="fas fa-user"></i> Iniciar sesión
+    </a>
+    {% endif %}
+   </div>
+  </nav>
+  <div class="flex flex-col items-center justify-center h-screen text-center">
+   <h1 class="text-5xl font-bold text-black mb-4">
+    ¿Viste un perrito solo en la calle?
+   </h1>
+   <p class="text-2xl text-gray-500 mb-8">
+    ¡Ayúdalo a encontrar su hogar!
+   </p>
+   <a href="{% url 'avistamiento_router' %}" class="bg-indigo-600 text-white text-xl font-bold py-2 px-6 rounded-full hover:bg-indigo-700 transition duration-300">
+    Reportar
+   </a>
+  </div>
+ </body>
+</html>
