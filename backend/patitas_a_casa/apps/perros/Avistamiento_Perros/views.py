@@ -7,9 +7,13 @@ from django.utils.decorators import method_decorator
 from .models import AvistamientoPerro
 from .forms import AvistamientoAnonimoForm, AvistamientoPersonaForm, AvistamientoAlbergueForm
 from patitas_a_casa.apps.usuarios.models import Usuario, Albergue
+from django.views.generic import TemplateView
+from django.http import JsonResponse
 
-def home(request):
+
+def home(request):  
     return render(request, 'home.html')
+
 def determinar_tipo_usuario(request):
     """Determina si el usuario es una persona física o un albergue"""
     if not request.user.is_authenticated:
@@ -22,7 +26,6 @@ def determinar_tipo_usuario(request):
             return Albergue.objects.get(usuario=request.user)
         except Albergue.DoesNotExist:
             return None
-
 class AvistamientoAnonimoCreateView(CreateView):
     model = AvistamientoPerro
     form_class = AvistamientoAnonimoForm
@@ -30,9 +33,19 @@ class AvistamientoAnonimoCreateView(CreateView):
     success_url = reverse_lazy('avistamiento_exito')
     
     def form_valid(self, form):
-        messages.success(self.request, "¡Gracias por reportar este avistamiento! Tu ayuda es invaluable para reunir a las mascotas con sus familias.")
-        return super().form_valid(form)
-
+        print("Datos del formulario:", form.cleaned_data)  # Para depuración
+        response = super().form_valid(form)
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': True})
+        messages.success(self.request, "¡Reporte enviado con éxito!")
+        return response
+    
+    def form_invalid(self, form):
+        print("Errores del formulario:", form.errors)  # Para depuración
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'errors': form.errors})
+        return super().form_invalid(form)
+    
 @method_decorator(login_required, name='dispatch')
 class AvistamientoPersonaCreateView(CreateView):
     model = AvistamientoPerro
@@ -113,3 +126,28 @@ class DetalleAvistamientoView(DetailView):
     model = AvistamientoPerro
     template_name = 'avistamiento/detalle_avistamiento.html'
     context_object_name = 'avistamiento'
+
+class HomeView(TemplateView):
+    template_name = 'home.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Últimos 10 avistamientos reportados
+        context['avistamientos_recientes'] = AvistamientoPerro.objects.all().order_by('-fecha_reporte')[:10]
+        return context
+    
+def crear_avistamiento_anonimo(request):
+    if request.method == "POST":
+        form = AvistamientoAnonimoForm(request.POST, request.FILES)
+        if form.is_valid():
+            avistamiento = form.save()
+            return JsonResponse({ 
+                "success": True,
+                "message": "¡Reporte enviado con éxito!"
+            })
+        else:
+            return JsonResponse({
+                "success": False,
+                "errors": form.errors
+            }, status=400)
+    return JsonResponse({"error": "Método no permitido"}, status=405)

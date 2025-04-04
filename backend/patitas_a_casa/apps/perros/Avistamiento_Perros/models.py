@@ -1,10 +1,8 @@
 from django.db import models
 from django.utils import timezone
-#from apps.usuarios.models import Usuario, Albergue
 from patitas_a_casa.apps.usuarios.models import Usuario, Albergue
 
 class AvistamientoPerro(models.Model):
-    # Opciones para los campos de selección
     SEXO_CHOICES = [
         ('M', 'Macho'),
         ('H', 'Hembra'),
@@ -15,6 +13,7 @@ class AvistamientoPerro(models.Model):
         ('P', 'Pequeño'),
         ('M', 'Mediano'),
         ('G', 'Grande'),
+        ('Gi', 'Gigante'),
     ]
     
     ESTADO_CHOICES = [
@@ -22,7 +21,8 @@ class AvistamientoPerro(models.Model):
         ('H', 'Herido'),
         ('D', 'Desnutrido'),
         ('E', 'Enfermo'),
-        ('O', 'Otro'),
+        ('Ag', 'Agresivo'),
+        ('As', 'Asustado'),
     ]
     
     # Campos comunes para todos los tipos de avistamiento
@@ -40,12 +40,12 @@ class AvistamientoPerro(models.Model):
     # Información del perro
     foto = models.ImageField(upload_to='avistamientos/', blank=True, null=True)
     raza = models.CharField(max_length=100, blank=True, null=True)
-    sexo = models.CharField(max_length=1, choices=SEXO_CHOICES, default='D')
-    tamaño = models.CharField(max_length=1, choices=TAMAÑO_CHOICES)
+    sexo = models.CharField(max_length=30, choices=SEXO_CHOICES, default='D')
+    tamaño = models.CharField(max_length=10, choices=TAMAÑO_CHOICES)
     color_dominante = models.CharField(max_length=50)
     señas_particulares = models.TextField(blank=True, null=True)
     identificador = models.CharField(max_length=200, blank=True, null=True, help_text="Collar, placa, chip, etc.")
-    estado_perro = models.CharField(max_length=1, choices=ESTADO_CHOICES, default='S')
+    estado_perro = models.CharField(max_length=10, choices=ESTADO_CHOICES, default='S')
     descripcion = models.TextField()
     
     # Tipo de avistamiento y relaciones
