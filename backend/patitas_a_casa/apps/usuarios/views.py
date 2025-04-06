@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView, ListView, TemplateView
 
@@ -205,6 +206,28 @@ class ListaAlberguesView(ListView):
     def get_queryset(self):
         return Albergue.objects.filter(activo=True).order_by('nombre')
 
+
 def registro_exitoso(request):
     """Vista de éxito después del registro"""
     return render(request, 'usuarios/registro_exitoso.html')
+
+def loggin_usuario(request):
+    """Vista de pantalla para inicio de sesión del usuario"""
+    if request.method == "POST":
+        form = AuthenticationForm(data = request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            return redirect('home')
+        
+    else:
+        form = AuthenticationForm()
+	
+    context = {
+        'form': form,
+    }
+    return render(request, "usuarios/loggin_usuario.html", context)
+
+def logout_usuario(request):
+    if request.method == "POST":
+        logout(request)
+        return redirect("perros:prueba")
