@@ -23,4 +23,8 @@ urlpatterns = [
     # Rutas públicas para albergues
     path('albergues/', views.ListaAlberguesView.as_view(), name='lista_albergues'),
     path('albergue/<int:pk>/', views.ver_albergue, name='ver_albergue'),
+
+    # Rutas para iniciar sesión y cerrar sesión (log in y log out)
+    path('inicio/usuario/', views.loggin_usuario, name = 'loggin_usuario'),
+    path('cerrar/usuario/', views.logout_usuario, name = 'logout_usuario'),
 ]
