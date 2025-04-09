@@ -1,0 +1,1 @@
+default_app_config = 'patitas_a_casa.apps.usuarios.apps.UsuariosConfig'
