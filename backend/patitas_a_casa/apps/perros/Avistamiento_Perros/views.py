@@ -10,22 +10,11 @@ from patitas_a_casa.apps.usuarios.models import Usuario, Albergue
 from django.views.generic import TemplateView
 from django.http import JsonResponse
 
-
 def home(request):  
     return render(request, 'home.html')
 
 def determinar_tipo_usuario(request):
-    """Determina si el usuario es una persona física o un albergue"""
-    if not request.user.is_authenticated:
-        return None
-    
-    try:
-        return Usuario.objects.get(usuario=request.user)
-    except Usuario.DoesNotExist:
-        try:
-            return Albergue.objects.get(usuario=request.user)
-        except Albergue.DoesNotExist:
-            return None
+    return request.user  # Usa directamente el usuario autenticado
 class AvistamientoAnonimoCreateView(CreateView):
     model = AvistamientoPerro
     form_class = AvistamientoAnonimoForm
@@ -33,7 +22,7 @@ class AvistamientoAnonimoCreateView(CreateView):
     success_url = reverse_lazy('avistamiento_exito')
     
     def form_valid(self, form):
-        print("Datos del formulario:", form.cleaned_data)  # Para depuración
+        print("Datos del formulario:", form.cleaned_data)
         response = super().form_valid(form)
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'success': True})
@@ -41,7 +30,7 @@ class AvistamientoAnonimoCreateView(CreateView):
         return response
     
     def form_invalid(self, form):
-        print("Errores del formulario:", form.errors)  # Para depuración
+        print("Errores del formulario:", form.errors)
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'success': False, 'errors': form.errors})
         return super().form_invalid(form)
@@ -60,9 +49,8 @@ class AvistamientoPersonaCreateView(CreateView):
         return super().form_valid(form)
     
     def dispatch(self, request, *args, **kwargs):
-        # Verificar que el usuario sea una persona física
         try:
-            Usuario.objects.get(usuario=request.user)
+            request.user 
             return super().dispatch(request, *args, **kwargs)
         except Usuario.DoesNotExist:
             messages.error(request, "No tienes permiso para acceder a esta página. Esta función es solo para personas físicas.")
@@ -82,7 +70,6 @@ class AvistamientoAlbergueCreateView(CreateView):
         return super().form_valid(form)
     
     def dispatch(self, request, *args, **kwargs):
-        # Verificar que el usuario sea un albergue
         try:
             Albergue.objects.get(usuario=request.user)
             return super().dispatch(request, *args, **kwargs)
@@ -95,19 +82,15 @@ def avistamiento_router(request):
     Redirige al usuario al formulario correspondiente según su tipo
     """
     if not request.user.is_authenticated:
-        # Usuario anónimo
         return redirect('crear_avistamiento_anonimo')
     
     tipo_usuario = determinar_tipo_usuario(request)
     
     if isinstance(tipo_usuario, Usuario):
-        # Es una persona física
         return redirect('crear_avistamiento_persona')
     elif isinstance(tipo_usuario, Albergue):
-        # Es un albergue
         return redirect('crear_avistamiento_albergue')
     else:
-        # Usuario autenticado pero sin perfil
         messages.warning(request, "No se pudo determinar tu tipo de usuario. Por favor, completa tu perfil.")
         return redirect('home')
 
@@ -132,7 +115,6 @@ class HomeView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Últimos 10 avistamientos reportados
         context['avistamientos_recientes'] = AvistamientoPerro.objects.all().order_by('-fecha_reporte')[:10]
         return context
     

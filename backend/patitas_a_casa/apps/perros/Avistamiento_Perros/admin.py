@@ -48,5 +48,4 @@ class AvistamientoPerroAdmin(admin.ModelAdmin):
     get_reportante.short_description = "Reportante"
     
     def has_add_permission(self, request):
-        # Solo para visualización en el admin
         return False

@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-#from apps.usuarios.models import Usuario
 from patitas_a_casa.apps.usuarios.models import Usuario
 
 class PerroPerdido(models.Model):
@@ -39,7 +38,6 @@ class PerroPerdido(models.Model):
         ('sin_pelo', 'Sin pelo'),
     ]
     
-    # Información general del perro
     nombre = models.CharField(max_length=100)
     sexo = models.CharField(max_length=1, choices=SEXO_CHOICES)
     edad_años = models.PositiveIntegerField(default=0)
@@ -48,18 +46,14 @@ class PerroPerdido(models.Model):
     raza = models.CharField(max_length=100)
     esterilizado = models.BooleanField(default=False)
     
-    # Apariencia del perro
-    # Uso de ManyToManyField para almacenar múltiples colores
     colores = models.CharField(max_length=500, help_text="Colores separados por coma")
     patron_pelaje = models.CharField(max_length=20, choices=PELAJE_CHOICES)
     señas_particulares = models.TextField(blank=True, null=True)
     
-    # Accesorios e identificación
     tiene_collar = models.BooleanField(default=False)
     color_collar = models.CharField(max_length=50, blank=True, null=True)
     identificador = models.CharField(max_length=200, blank=True, null=True, help_text="Chip, placa, etc.")
     
-    # Lugar y momento en que se perdió
     entidad_federativa = models.CharField(max_length=100)
     municipio_alcaldia = models.CharField(max_length=100)
     codigo_postal = models.CharField(max_length=5)
@@ -69,10 +63,8 @@ class PerroPerdido(models.Model):
     fecha_hora_perdida = models.DateTimeField(default=timezone.now)
     fecha_registro = models.DateTimeField(auto_now_add=True)
     
-    # Relación con el propietario
     propietario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='perros_perdidos')
     
-    # Estado del reporte
     ESTADO_CHOICES = [
         ('activo', 'Activo'),
         ('encontrado', 'Encontrado'),
@@ -80,9 +72,6 @@ class PerroPerdido(models.Model):
     ]
     estado = models.CharField(max_length=10, choices=ESTADO_CHOICES, default='activo')
     fecha_actualizacion = models.DateTimeField(auto_now=True)
-    
-    # Fotos del perro
-    # Las fotos se manejarán con un modelo separado para permitir múltiples fotos
     
     class Meta:
         verbose_name = "Perro Perdido"
@@ -139,11 +128,9 @@ class FotoPerroPerdido(models.Model):
         return f"Foto de {self.perro.nombre} - {'Principal' if self.es_principal else 'Secundaria'}"
     
     def save(self, *args, **kwargs):
-        # Si esta foto se marca como principal, desmarcar las demás
         if self.es_principal:
             FotoPerroPerdido.objects.filter(perro=self.perro, es_principal=True).update(es_principal=False)
         
-        # Si es la primera foto, marcarla como principal
         if not FotoPerroPerdido.objects.filter(perro=self.perro).exists():
             self.es_principal = True
             

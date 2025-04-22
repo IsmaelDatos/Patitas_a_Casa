@@ -25,11 +25,9 @@ class AvistamientoPerro(models.Model):
         ('As', 'Asustado'),
     ]
     
-    # Campos comunes para todos los tipos de avistamiento
     fecha_hora_avistamiento = models.DateTimeField(default=timezone.now)
     fecha_reporte = models.DateTimeField(auto_now_add=True)
     
-    # Ubicación
     entidad_federativa = models.CharField(max_length=100)
     municipio_alcaldia = models.CharField(max_length=100)
     codigo_postal = models.CharField(max_length=5)
@@ -37,7 +35,6 @@ class AvistamientoPerro(models.Model):
     calle = models.CharField(max_length=200)
     numero_exterior = models.CharField(max_length=20)
     
-    # Información del perro
     foto = models.ImageField(upload_to='avistamientos/', blank=True, null=True)
     raza = models.CharField(max_length=100, blank=True, null=True)
     sexo = models.CharField(max_length=30, choices=SEXO_CHOICES, default='D')
@@ -48,12 +45,10 @@ class AvistamientoPerro(models.Model):
     estado_perro = models.CharField(max_length=10, choices=ESTADO_CHOICES, default='S')
     descripcion = models.TextField()
     
-    # Tipo de avistamiento y relaciones
     es_anonimo = models.BooleanField(default=False)
     reportado_por_usuario = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True)
     reportado_por_albergue = models.ForeignKey(Albergue, on_delete=models.SET_NULL, null=True, blank=True)
     
-    # Campo adicional para personas físicas
     puede_albergar = models.BooleanField(default=False)
     
     class Meta:

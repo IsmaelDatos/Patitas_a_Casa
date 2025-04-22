@@ -16,104 +16,6 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Nunito', sans-serif;
         }
         
-        /* Estilos de la navbar */
-        .container {
-            display: flex;
-            margin: auto;
-            font-size: 14px;
-        }
-        
-        .navbar {
-            margin: auto;
-            display: flex;
-            padding: 0.5rem 1.5rem;
-            background: #272459;
-            border-radius: 3rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .nav-enlaces {
-            margin: auto;
-            display: flex;
-            gap: 2rem;
-            font-size: 20px;
-            align-items: center;
-        }
-        
-        .nav-enlace, .desplegable li {
-            list-style: none;
-            height: 100%;
-            padding: 0.5rem 1rem;
-            font-weight: 1000;
-            cursor: pointer;
-            margin: auto;
-        }
-        
-        a {
-            text-decoration: none;
-            color: currentColor;
-        }
-        
-        .desplegable {
-            position: absolute;
-            padding: 0.5rem 0;
-            margin: 0.5rem -0.5rem;
-            background: #8a6ff0;
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 0.5rem;
-            font-size: 18px;
-            display: none;
-        }
-        
-        .nav-enlace:hover {
-            background-color: #8a6ff0;
-            color: #fff;
-            border-radius: 0.5rem;
-        }
-        
-        .secciones:hover .desplegable {
-            display: block;
-        }
-        
-        .secciones a {
-            margin: auto;
-            display: flex;
-            color: #fff;
-        }
-        
-        .desplegable li:hover {
-            background: #6a4fcf;
-            color: #fff;
-            border-radius: 0.5rem;
-        }
-        
-        #logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #8a6ff0;
-        }
-        
-        #proyecto_nombre {
-            margin-right: 100px;
-            color: #fff;
-            font-size: 23px;
-            font-weight: 1000;
-        }
-        
-        .user-icon {
-            font-size: 1.8rem;
-            color: white;
-            transition: all 0.3s;
-        }
-        
-        .user-icon:hover {
-            color: #d8d8d8;
-            transform: scale(1.1);
-        }
-        
-        /* Estilos mejorados para los formularios */
         .form-container {
             display: flex;
             justify-content: center;
@@ -171,17 +73,17 @@
             font-size: 0.95rem;
         }
         
-        .form-input {
+        .form-input, .form-select {
             width: 100%;
             padding: 0.9rem;
-            border: none; /* Eliminado el borde morado */
+            border: none;
             border-radius: 0.5rem;
             font-size: 1rem;
             transition: all 0.3s;
             background-color: rgba(255, 255, 255, 0.9);
         }
         
-        .form-input:focus {
+        .form-input:focus, .form-select:focus {
             outline: none;
             box-shadow: 0 0 0 3px rgba(90, 60, 232, 0.2);
             background-color: white;
@@ -324,113 +226,48 @@
             display: none;
         }
         
-        /* Nueva clase para el espacio de contraseñas sin título */
         .password-section {
             margin-bottom: 1.5rem;
         }
-    </style>
-    <style>
+        
         .errorlist {
             color: #ff0000;
             list-style: none;
             padding: 0;
             margin-bottom: 1rem;
         }
+        
         .alert {
             padding: 0.75rem 1.25rem;
             margin-bottom: 1rem;
             border: 1px solid transparent;
             border-radius: 0.25rem;
         }
+        
         .alert-success {
             color: #155724;
             background-color: #d4edda;
             border-color: #c3e6cb;
         }
+        
         .alert-error {
             color: #721c24;
             background-color: #f8d7da;
             border-color: #f5c6cb;
         }
-    </style>
-    
-    <script>
-        function toggleForm(type) {
-            const personaForm = document.getElementById('persona-form');
-            const albergueForm = document.getElementById('albergue-form');
-            const personaBtn = document.getElementById('persona-btn');
-            const albergueBtn = document.getElementById('albergue-btn');
-            
-            if (type === 'persona') {
-                personaForm.classList.remove('hidden');
-                albergueForm.classList.add('hidden');
-                personaBtn.classList.add('active');
-                albergueBtn.classList.remove('active');
-            } else {
-                personaForm.classList.add('hidden');
-                albergueForm.classList.remove('hidden');
-                personaBtn.classList.remove('active');
-                albergueBtn.classList.add('active');
-            }
-        }
         
-        document.addEventListener('DOMContentLoaded', function() {
-            toggleForm('persona');
-            
-            const fileInput = document.getElementById('shelter-photo');
-            const fileText = document.getElementById('file-text');
-            
-            fileInput.addEventListener('change', function() {
-                if (this.files && this.files[0]) {
-                    fileText.textContent = this.files[0].name;
-                }
-            });
-        });
-    </script>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body class="bg-gray-100">
-    <div class="container">
-        <nav class="navbar">
-            <ul class="nav-enlaces">
-                <img src="/media/perros_fotos/1.jpg" alt="Logo de Patitas a casa" id="logo">
-                <p id="proyecto_nombre">Patitas a casa</p>
-                <li class="nav-enlace secciones">
-                    <a href="{% url 'home' %}">Principal</a>
-                    <ul class="desplegable">
-                        <li>Albergues cercanos</li>
-                        <li>Mapa de reportes</li>
-                    </ul>
-                </li>
-                <li class="nav-enlace secciones">
-                    <a href="#">About</a>
-                    <ul class="desplegable">
-                        <li>Blog</li>
-                        <li>Docs</li>
-                        <li>Quienes somos?</li>
-                    </ul>
-                </li>
-                <li class="nav-enlace secciones">
-                    <a href="#">Adoptar</a>
-                </li>
-                <li class="nav-enlace secciones">
-                    <a href="{% url 'crear_avistamiento_anonimo' %}">Reportar</a>
-                    <ul class="desplegable">
-                        <li>Perdido</li>
-                        <li>Avistamiento</li>
-                    </ul>
-                </li>
-                <a href="{% url 'usuarios:login' %}" class="user-icon">
-                    <i class="fas fa-user-circle"></i>
-                </a>
-            </ul>
-        </nav>
-    </div>
+    {% include 'navbar.html' %}
     
     <div class="form-container">
         <div class="form-box">
             <h1 class="form-title">Crear cuenta</h1>
             
-            <!-- Mensajes de error/success -->
             {% if messages %}
                 {% for message in messages %}
                     <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}">
@@ -508,6 +345,7 @@
             <!-- Formulario para Albergue -->
             <form id="albergue-form" class="hidden" method="post" action="{% url 'usuarios:registro' %}" enctype="multipart/form-data">
                 {% csrf_token %}
+                <input type="hidden" name="es_albergue" value="on">
                 
                 <div class="form-section">
                     <div class="section-title">
@@ -515,8 +353,8 @@
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label" for="id_shelter_name">Nombre del albergue</label>
-                        <input class="form-input" id="id_shelter_name" type="text" name="shelter_name" required>
+                        <label class="form-label" for="id_nombre">Nombre del albergue</label>
+                        <input class="form-input" id="id_nombre" type="text" name="nombre" required>
                     </div>
                     
                     <div class="form-group">
@@ -532,8 +370,8 @@
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label" for="id_phone">Teléfono de contacto</label>
-                        <input class="form-input" id="id_phone" type="tel" name="phone" required>
+                        <label class="form-label" for="id_telefono">Teléfono de contacto</label>
+                        <input class="form-input" id="id_telefono" type="tel" name="telefono" required>
                     </div>
                 </div>
                 
@@ -542,35 +380,50 @@
                         <i class="fas fa-map-marker-alt"></i> Ubicación del albergue
                     </div>
                     
-                    <div class="grid-3">
-                        <div class="form-group">
-                            <label class="form-label" for="id_state">Entidad federativa</label>
-                            <input class="form-input" id="id_state" type="text" name="state" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="id_municipality">Municipio</label>
-                            <input class="form-input" id="id_municipality" type="text" name="municipality" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="id_postal_code">Código postal</label>
-                            <input class="form-input" id="id_postal_code" type="text" name="postal_code" required>
-                        </div>
-                    </div>
-                    
                     <div class="grid-2">
                         <div class="form-group">
-                            <label class="form-label" for="id_street">Calle</label>
-                            <input class="form-input" id="id_street" type="text" name="street" required>
+                            <label class="form-label" for="id_calle">Calle</label>
+                            <input class="form-input" id="id_calle" type="text" name="calle" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="id_ext_number">Número exterior</label>
-                            <input class="form-input" id="id_ext_number" type="text" name="ext_number" required>
+                            <label class="form-label" for="id_num_ext">Número exterior</label>
+                            <input class="form-input" id="id_num_ext" type="text" name="num_ext" required>
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label class="form-label" for="id_references">Referencias</label>
-                        <textarea class="form-input" id="id_references" name="references" rows="3"></textarea>
+                        <label class="form-label" for="id_num_int">Número interior (opcional)</label>
+                        <input class="form-input" id="id_num_int" type="text" name="num_int">
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="id_entidad">Entidad Federativa</label>
+                            <select class="form-select" id="id_entidad" name="entidad" required>
+                                <option value="">Seleccione una entidad</option>
+                                <option value="CDMX">Ciudad de México</option>
+                                <option value="EDOMEX">Estado de México</option>
+                                <option value="JAL">Jalisco</option>
+                                <option value="NL">Nuevo León</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="id_alcaldia">Alcaldía/Municipio</label>
+                            <select class="form-select" id="id_alcaldia" name="alcaldia" required>
+                                <option value="">Seleccione una alcaldía</option>
+                                <!-- Opciones se llenarán con JavaScript -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_codigo_postal">Código Postal</label>
+                        <input class="form-input" id="id_codigo_postal" type="text" name="codigo_postal" pattern="\d{5}" maxlength="5" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_referencias">Referencias</label>
+                        <textarea class="form-input" id="id_referencias" name="referencias" rows="2"></textarea>
                     </div>
                 </div>
                 
@@ -581,12 +434,42 @@
                     
                     <div class="grid-2">
                         <div class="form-group">
-                            <label class="form-label" for="id_current_dogs">Perros actualmente en el albergue</label>
-                            <input class="form-input" id="id_current_dogs" type="number" name="current_dogs" min="0" required>
+                            <label class="form-label" for="id_animales_actuales">Animales actualmente en el albergue</label>
+                            <input class="form-input" id="id_animales_actuales" type="number" name="animales_actuales" min="0" required>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="id_max_capacity">Capacidad máxima</label>
-                            <input class="form-input" id="id_max_capacity" type="number" name="max_capacity" min="1" required>
+                            <label class="form-label" for="id_capacidad_maxima">Capacidad máxima</label>
+                            <input class="form-input" id="id_capacidad_maxima" type="number" name="capacidad_maxima" min="1" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Servicios ofrecidos</label>
+                        <div class="services-grid">
+                            <div class="service-checkbox">
+                                <input type="checkbox" id="id_servicio_vacunacion" name="servicios" value="vacunacion">
+                                <label for="id_servicio_vacunacion">Vacunación</label>
+                            </div>
+                            <div class="service-checkbox">
+                                <input type="checkbox" id="id_servicio_esterilizacion" name="servicios" value="esterilizacion">
+                                <label for="id_servicio_esterilizacion">Esterilización</label>
+                            </div>
+                            <div class="service-checkbox">
+                                <input type="checkbox" id="id_servicio_adopcion" name="servicios" value="adopcion">
+                                <label for="id_servicio_adopcion">Adopción</label>
+                            </div>
+                            <div class="service-checkbox">
+                                <input type="checkbox" id="id_servicio_rescate" name="servicios" value="rescate">
+                                <label for="id_servicio_rescate">Rescate</label>
+                            </div>
+                            <div class="service-checkbox">
+                                <input type="checkbox" id="id_servicio_estetica" name="servicios" value="estetica">
+                                <label for="id_servicio_estetica">Estética</label>
+                            </div>
+                            <div class="service-checkbox">
+                                <input type="checkbox" id="id_servicio_hospedaje" name="servicios" value="hospedaje">
+                                <label for="id_servicio_hospedaje">Hospedaje</label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -596,10 +479,10 @@
                         <i class="fas fa-camera"></i> Foto del albergue
                     </div>
                     
-                    <label for="id_shelter_photo" class="file-upload">
+                    <label for="id_foto" class="file-upload">
                         <i class="fas fa-cloud-upload-alt"></i>
                         <span id="file-text" class="file-upload-text">Haz clic para subir una foto</span>
-                        <input class="file-input" id="id_shelter_photo" type="file" name="shelter_photo" accept="image/*">
+                        <input class="file-input" id="id_foto" type="file" name="foto" accept="image/*">
                     </label>
                 </div>
                 
@@ -625,5 +508,80 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function toggleForm(type) {
+            const personaForm = document.getElementById('persona-form');
+            const albergueForm = document.getElementById('albergue-form');
+            const personaBtn = document.getElementById('persona-btn');
+            const albergueBtn = document.getElementById('albergue-btn');
+            
+            if (type === 'persona') {
+                personaForm.classList.remove('hidden');
+                albergueForm.classList.add('hidden');
+                personaBtn.classList.add('active');
+                albergueBtn.classList.remove('active');
+            } else {
+                personaForm.classList.add('hidden');
+                albergueForm.classList.remove('hidden');
+                personaBtn.classList.remove('active');
+                albergueBtn.classList.add('active');
+            }
+        }
+        
+        // Mapeo de entidades a alcaldías/municipios
+        const ubicaciones = {
+            'CDMX': ['Álvaro Obregón', 'Azcapotzalco', 'Benito Juárez', 'Coyoacán', 'Cuajimalpa', 
+                    'Cuauhtémoc', 'Gustavo A. Madero', 'Iztacalco', 'Iztapalapa', 'Magdalena Contreras',
+                    'Miguel Hidalgo', 'Milpa Alta', 'Tláhuac', 'Tlalpan', 'Venustiano Carranza', 'Xochimilco'],
+            'EDOMEX': ['Acolman', 'Aculco', 'Almoloya de Juárez', 'Amecameca', 'Apaxco', 
+                      'Atizapán de Zaragoza', 'Atlacomulco', 'Axapusco', 'Coacalco', 'Ecatepec'],
+            'JAL': ['Guadalajara', 'Zapopan', 'Tlaquepaque', 'Tonalá', 'Tlajomulco', 
+                   'El Salto', 'Ixtlahuacán de los Membrillos', 'Juanacatlán', 'Chapala', 'Zapotlanejo'],
+            'NL': ['Monterrey', 'Guadalupe', 'San Nicolás de los Garza', 'San Pedro Garza García', 
+                  'Santa Catarina', 'Apodaca', 'Escobedo', 'García', 'Juárez', 'Santiago']
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleForm('persona');
+            
+            // Manejar cambio de entidad federativa
+            const entidadSelect = document.getElementById('id_entidad');
+            const alcaldiaSelect = document.getElementById('id_alcaldia');
+            
+            entidadSelect.addEventListener('change', function() {
+                const entidad = this.value;
+                alcaldiaSelect.innerHTML = '<option value="">Seleccione una alcaldía</option>';
+                
+                if (entidad && ubicaciones[entidad]) {
+                    ubicaciones[entidad].forEach(function(alcaldia) {
+                        const option = document.createElement('option');
+                        option.value = alcaldia;
+                        option.textContent = alcaldia;
+                        alcaldiaSelect.appendChild(option);
+                    });
+                }
+            });
+            
+            // Manejar subida de archivo
+            const fileInput = document.getElementById('id_foto');
+            const fileText = document.getElementById('file-text');
+            
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    fileText.textContent = this.files[0].name;
+                }
+            });
+            
+            // Validar código postal
+            const codigoPostalInput = document.getElementById('id_codigo_postal');
+            codigoPostalInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+                if (this.value.length > 5) {
+                    this.value = this.value.slice(0, 5);
+                }
+            });
+        });
+    </script>
 </body>
 </html>

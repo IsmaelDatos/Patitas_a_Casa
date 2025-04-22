@@ -28,8 +28,6 @@ class PerroPerdidoCreateView(CreateView):
     def form_valid(self, form):
         context = self.get_context_data()
         foto_formset = context['foto_formset']
-        
-        # Verificar que el usuario tenga un perfil de persona física
         try:
             propietario = Usuario.objects.get(usuario=self.request.user)
         except Usuario.DoesNotExist:
@@ -37,17 +35,13 @@ class PerroPerdidoCreateView(CreateView):
             return redirect('completar_perfil')
         
         with transaction.atomic():
-            # Guardar el formulario principal
             self.object = form.save(commit=False)
             self.object.propietario = propietario
             self.object.save()
-            
-            # Guardar las fotos si el formset es válido
             if foto_formset.is_valid():
                 foto_formset.instance = self.object
                 foto_formset.save()
             else:
-                # Si hay errores en el formset, mostrarlos y volver al formulario
                 for error in foto_formset.errors:
                     messages.error(self.request, error)
                 return self.form_invalid(form)
@@ -75,7 +69,6 @@ class PerroPerdidoUpdateView(UpdateView):
         return context
     
     def dispatch(self, request, *args, **kwargs):
-        # Verificar que el usuario sea el propietario
         obj = self.get_object()
         if obj.propietario.usuario != request.user:
             messages.error(request, "No tienes permiso para editar este registro.")
@@ -124,7 +117,6 @@ class PerroPerdidoDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         # Añadir fotos
         context['fotos'] = self.object.fotos.all()
-        # Verificar si el usuario actual es el propietario
         if self.request.user.is_authenticated:
             try:
                 usuario = Usuario.objects.get(usuario=self.request.user)
@@ -144,7 +136,6 @@ class PerroPerdidoDeleteView(DeleteView):
     success_url = reverse_lazy('registro_perro:mis_perros')
     
     def dispatch(self, request, *args, **kwargs):
-        # Verificar que el usuario sea el propietario
         obj = self.get_object()
         if obj.propietario.usuario != request.user:
             messages.error(request, "No tienes permiso para eliminar este registro.")
@@ -161,8 +152,6 @@ class PerroPerdidoDeleteView(DeleteView):
 @login_required
 def marcar_como_encontrado(request, pk):
     perro = get_object_or_404(PerroPerdido, pk=pk)
-    
-    # Verificar si el usuario es el propietario
     try:
         usuario = Usuario.objects.get(usuario=request.user)
         if perro.propietario != usuario:
@@ -171,8 +160,6 @@ def marcar_como_encontrado(request, pk):
     except Usuario.DoesNotExist:
         messages.error(request, "No tienes un perfil de usuario válido.")
         return redirect('registro_perro:detalle_perro', pk=perro.pk)
-    
-    # Cambiar el estado a 'encontrado'
     perro.estado = 'encontrado'
     perro.save()
     
@@ -187,10 +174,7 @@ class PerrosPerdidosListView(ListView):
     paginate_by = 12
     
     def get_queryset(self):
-        # Mostrar solo los perros activos (no encontrados)
         queryset = PerroPerdido.objects.filter(estado='activo').order_by('-fecha_registro')
-        
-        # Aplicar filtros si los hay
         entidad = self.request.GET.get('entidad')
         municipio = self.request.GET.get('municipio')
         raza = self.request.GET.get('raza')
@@ -209,9 +193,7 @@ class PerrosPerdidosListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Añadir opciones para filtros
         context['entidades'] = PerroPerdido.objects.values_list('entidad_federativa', flat=True).distinct()
         context['tamaños'] = dict(PerroPerdido.TAMAÑO_CHOICES)
-        # Pasar los parámetros actuales para mantener los filtros
         context['current_filters'] = self.request.GET.dict()
         return context

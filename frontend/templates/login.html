@@ -3,114 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Patitas a casa</title>
+    <title>Patitas a casa - Login</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI';
-        }
-        
-        .container {
-            display: flex;
-            margin: auto;
-            font-size: 14px;
-        }
-        
-        .navbar {
-            margin: auto;
-            display: flex;
-            padding: 0.5rem 1.5rem;
-            background: #272459;
-            border-radius: 3rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        
-        .nav-enlaces {
-            margin: auto;
-            display: flex;
-            gap: 2rem;
-            font-size: 20px;
-            align-items: center;
-        }
-        
-        .nav-enlace, .desplegable li {
-            list-style: none;
-            height: 100%;
-            padding: 0.5rem 1rem;
-            font-weight: 1000;
-            cursor: pointer;
-            margin: auto;
-        }
-        
-        a {
-            text-decoration: none;
-            color: currentColor;
-        }
-        
-        .desplegable {
-            position: absolute;
-            padding: 0.5rem 0;
-            margin: 0.5rem -0.5rem;
-            background: #8a6ff0;
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 0.5rem;
-            font-size: 18px;
-            display: none;
-        }
-        
-        .nav-enlace:hover {
-            background-color: #8a6ff0;
-            color: #fff;
-            border-radius: 0.5rem;
-        }
-        
-        .secciones:hover .desplegable {
-            display: block;
-        }
-        
-        .secciones a {
-            margin: auto;
-            display: flex;
-            color: #fff;
-        }
-        
-        .desplegable li:hover {
-            background: #6a4fcf;
-            color: #fff;
-            border-radius: 0.5rem;
-        }
-        
-        #logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #8a6ff0;
-        }
-        
-        #proyecto_nombre {
-            margin-right: 100px;
-            color: #fff;
-            font-size: 23px;
-            font-weight: 1000;
-        }
-        
-        .user-icon {
-            font-size: 1.8rem;
-            color: white;
-            transition: all 0.3s;
-        }
-        
-        .user-icon:hover {
-            color: #d8d8d8;
-            transform: scale(1.1);
-        }
-        
         .login-container {
             display: flex;
             justify-content: center;
@@ -200,42 +98,8 @@
     </style>
 </head>
 <body class="bg-gray-100">
-    <div class="container">
-        <nav class="navbar">
-            <ul class="nav-enlaces">
-                <img src="/media/perros_fotos/1.jpg" alt="Logo de Patitas a casa" id="logo">
-                <p id="proyecto_nombre">Patitas a casa</p>
-                <li class="nav-enlace secciones">
-                    <a href="{% url 'home' %}">Principal</a>
-                    <ul class="desplegable">
-                        <li>Albergues cercanos</li>
-                        <li>Mapa de reportes</li>
-                    </ul>
-                </li>
-                <li class="nav-enlace secciones">
-                    <a href="#">About</a>
-                    <ul class="desplegable">
-                        <li>Blog</li>
-                        <li>Docs</li>
-                        <li>Quienes somos?</li>
-                    </ul>
-                </li>
-                <li class="nav-enlace secciones">
-                    <a href="#">Adoptar</a>
-                </li>
-                <li class="nav-enlace secciones">
-                    <a href="{% url 'crear_avistamiento_anonimo' %}">Reportar</a>
-                    <ul class="desplegable">
-                        <li>Perdido</li>
-                        <li>Avistamiento</li>
-                    </ul>
-                </li>
-                <a href="{% url 'login' %}" class="user-icon">
-                    <i class="fas fa-user-circle"></i>
-                </a>
-            </ul>
-        </nav>
-    </div>
+    <!-- Navbar heredada -->
+    {% include 'navbar.html' %}
     
     <div class="login-container">
         {% if messages %}
