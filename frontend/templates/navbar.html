@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,21 +6,31 @@
     <title>Navbar Patitas a Casa</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
+
         .navbar {
             margin: auto;
             display: flex;
-            padding: 0.5rem 1.5rem;
+            padding: 0.5rem 1rem;
             background: #272459;
             border-radius: 3rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            gap: 0;
         }
-        
-        .nav-enlaces {
+
+        {% comment %} .nav-enlaces {
             margin: auto;
             display: flex;
             gap: 2rem;
             font-size: 20px;
             align-items: center;
+        } {% endcomment %}
+         
+        .nav-enlaces {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            font-size: 20px;
+            padding: 0 1rem;
         }
         
         .nav-enlace, .desplegable li {
@@ -73,17 +84,26 @@
         }
         
         #logo {
-            width: 50px;
-            height: 50px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
-            background-color: #8a6ff0;
+            object-fit: contain;
+            background-color: transparent;
+            padding: 5px;
+            margin: 0; /* Elimina márgenes anteriores */
+            transition: transform 0.3s ease;
         }
         
+        #logo:hover {
+            transform: scale(1.05);  /* Efecto de leve crecimiento al pasar el mouse */
+        }
+
         #proyecto_nombre {
-            margin-right: 100px;
             color: #fff;
             font-size: 23px;
             font-weight: 1000;
+            margin: 0; /* Elimina márgenes anteriores */
+            white-space: nowrap;
         }
         
         .user-icon {
@@ -114,9 +134,9 @@
 <body>
     <nav class="navbar">
         <ul class="nav-enlaces">
-            <img src="/media/perros_fotos/1.jpg" alt="Logo de Patitas a casa" id="logo">
+            {% load static %}
+            <img src="/static/img/logo.png" alt="Logo" id="logo">
             <p id="proyecto_nombre">Patitas a casa</p>
-            
             <li class="nav-enlace secciones">
                 <a href="{% url 'home' %}">Principal</a>
                 <ul class="desplegable">
