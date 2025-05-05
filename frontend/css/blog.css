@@ -1,0 +1,226 @@
+/*Estilo básico para todos los del CSS*/
+*
+{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: poppins;
+}
+
+/*Estilo para los anchors y para las listas no ordenadas*/
+
+a{
+    text-decoration: none;
+}
+
+ul{
+    list-style: none;
+}
+
+/*Estilo para el blog*/
+
+#blog{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+    padding-right: 0px;
+    background-color: #f9f8ff
+    
+}
+
+.encabezado-blog h3
+{
+	font-size: 2.4rem;
+	color: #252525;
+	font-weight: 800;
+	text-transform: uppercase;
+	line-height: 2.4rem;
+}
+
+.encabezado-blog strong
+{
+	color: #0a0ef8;
+	font-size: 1rem;
+	font-weight: 500;
+	letter-spacing: 0.3px;
+}
+
+.pestanias-blog
+{
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	max-width: 1050px;
+	width: 90%; 
+	margin-top: 50px;
+}
+
+.pestania-blog
+{
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    transition: all ease 0.3s;
+}
+
+.pestania-blog:hover
+{
+    background-color: #ffffff;
+    box-shadow: 16px 20px 50px rgba(0, 0, 0, 0.12);
+}
+
+.portada
+{
+    width: 100%;
+    height: 100%;
+    max-height: 300px;
+    overflow: hidden;
+    display: flex;
+    position: relative;
+}
+
+.portada img
+{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: all ease 0.3s;
+}
+
+.enlace-imagen
+{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #ffffff;
+	color: #252525;
+	box-shadow: 2px 2px 30px rgba(20, 97, 212, 0.12);
+	animation: fade 0.3s;
+}
+
+.pestania-blog:hover .portada a{
+    display: flex;
+}
+
+.pestania-blog:hover .portada img{
+    filter: blur(3px);
+}
+
+@keyframes fade
+{
+	0%
+	{
+		opacity: 0;
+	}
+	100%{
+		opacity: 1;
+	}
+}
+
+.descripcion
+{
+	display: flex;
+	flex-direction: column;
+	padding-top: 30px;
+	padding-right: 10px;
+	padding-bottom: 20px;
+	padding-left: 10px;
+}
+
+.descripcion strong, .descripcion p
+{
+	color: #797979;
+	font-size: 0.9rem;
+	font-weight: 400;
+}
+
+.descripcion a{
+	font-size: 1.4rem;
+	color: #252525;
+	font-weight: 800;
+	line-height: 1.8rem;
+	margin: 5px 0px 10px 0px;
+}
+
+.descripcion p
+{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+}
+
+.autor-blog{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.imagen-autor{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.imagen-autor img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.descripcion-autor{
+    display: flex;
+    flex-direction: column;
+}
+
+.descripcion-autor strong{
+    color: #252525;
+    font-weight: 800;
+}
+
+.descripcion-autor span{
+    color: #797979;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+@media(max-width: 920px)
+{
+	pestanias-blog{
+		grid-template-columns: 1fr 1fr;
+		grid-gap: 10px 0px;
+	}
+}
+
+@media(max-width: 600px)
+{
+	pestanias-blog{
+		grid-template-columns: 1fr;
+	}
+	.encabezado-blog h3{
+		font-size: 1.6rem;
+		line-height: 1.6rem;
+	}
+}
+
+
+
+
+
