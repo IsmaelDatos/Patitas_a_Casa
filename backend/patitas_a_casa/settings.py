@@ -5,15 +5,28 @@ SECRET_KEY = 'supersecretkey12345'
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'patitas_a_casa',
+#         'USER': 'ismael',
+#         #'PASSWORD': 'MAEL02005=()/',
+#         'PASSWORD': 'isma123',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'patitas_a_casa',
-        'USER': 'ismael',
-        #'PASSWORD': 'MAEL02005=()/',
-        'PASSWORD': 'isma123',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('PGDATABASE', 'patitas_a_casa'), 
+        'USER': os.getenv('PGUSER', 'ismael'),          
+        'PASSWORD': os.getenv('PGPASSWORD', 'isma123'), 
+        'HOST': os.getenv('PGHOST', 'localhost'),
+        'PORT': os.getenv('PGPORT', '5432'),
     }
 }
 
@@ -107,3 +120,4 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+ALLOWED_HOSTS = ['*']
