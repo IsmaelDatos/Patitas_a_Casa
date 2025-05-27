@@ -3,7 +3,7 @@ import os
 DEBUG = True
 SECRET_KEY = 'supersecretkey12345'
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 AUTH_USER_MODEL = 'usuarios.Usuario'
 
 # DATABASES = {
@@ -60,7 +60,10 @@ ROOT_URLCONF = 'patitas_a_casa.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, '../frontend/templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'frontend/templates'),  
+            os.path.join(BASE_DIR, 'frontend/templates/avistamiento'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -110,9 +113,8 @@ USE_L10N = True
 USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, '../frontend/static'),
+    os.path.join(BASE_DIR, 'frontend/static'),
 ]
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

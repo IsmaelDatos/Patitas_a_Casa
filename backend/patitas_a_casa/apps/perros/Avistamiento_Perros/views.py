@@ -111,11 +111,16 @@ class DetalleAvistamientoView(DetailView):
     context_object_name = 'avistamiento'
 
 class HomeView(TemplateView):
-    template_name = 'home.html'
+    template_name = 'home.html'  # Esto está correcto
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['avistamientos_recientes'] = AvistamientoPerro.objects.all().order_by('-fecha_reporte')[:10]
+        # Asegúrate que esta consulta no falle en producción
+        try:
+            context['avistamientos_recientes'] = AvistamientoPerro.objects.all().order_by('-fecha_reporte')[:10]
+        except Exception as e:
+            print(f"Error obteniendo avistamientos: {e}")
+            context['avistamientos_recientes'] = []
         return context
     
 def crear_avistamiento_anonimo(request):

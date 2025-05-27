@@ -1,6 +1,6 @@
 {
   "build": {
-    "command": "python manage.py collectstatic --noinput",
-    "postdeploy": "python manage.py migrate --noinput"
+    "command": "python backend/manage.py collectstatic --noinput",
+    "postdeploy": "python backend/manage.py migrate --noinput"
   }
 }
