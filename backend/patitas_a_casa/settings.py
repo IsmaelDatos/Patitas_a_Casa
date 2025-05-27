@@ -1,10 +1,13 @@
 from pathlib import Path
 import os
+
 DEBUG = True
 SECRET_KEY = 'supersecretkey12345'
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 AUTH_USER_MODEL = 'usuarios.Usuario'
+PROJECT_ROOT = BASE_DIR.parent
+FRONTEND_DIR = PROJECT_ROOT.parent / 'frontend'  
 
 # DATABASES = {
 #     'default': {
@@ -17,7 +20,6 @@ AUTH_USER_MODEL = 'usuarios.Usuario'
 #         'PORT': '5432',
 #     }
 # }
-
 
 DATABASES = {
     'default': {
@@ -57,12 +59,29 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'patitas_a_casa.urls'
 
+# TEMPLATES = [
+#     {
+#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         'DIRS': [
+#             os.path.join(BASE_DIR, 'frontend/templates'),  
+#             os.path.join(BASE_DIR, 'frontend/templates/avistamiento'),
+#         ],
+#         'APP_DIRS': True,
+#         'OPTIONS': {
+#             'context_processors': [
+#                 'django.template.context_processors.debug',
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#             ],
+#         },
+#     },
+# ]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'frontend/templates'),  
-            os.path.join(BASE_DIR, 'frontend/templates/avistamiento'),
+            os.path.join(FRONTEND_DIR, 'templates'),  # Ahora apunta correctamente a frontend/templates/
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -75,6 +94,7 @@ TEMPLATES = [
         },
     },
 ]
+
 WSGI_APPLICATION = 'patitas_a_casa.wsgi.application'
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -113,7 +133,7 @@ USE_L10N = True
 USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'frontend/static'),
+    os.path.join(FRONTEND_DIR, 'static'),
 ]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
