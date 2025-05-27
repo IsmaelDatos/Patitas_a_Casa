@@ -3,7 +3,7 @@ import os
 DEBUG = True
 SECRET_KEY = 'supersecretkey12345'
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 AUTH_USER_MODEL = 'usuarios.Usuario'
 
 # DATABASES = {
@@ -59,9 +59,7 @@ ROOT_URLCONF = 'patitas_a_casa.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, '../../frontend/templates'),
-        ],
+        'DIRS': [os.path.join(BASE_DIR, '../../frontend/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
