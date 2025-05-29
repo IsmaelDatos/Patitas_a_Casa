@@ -51,7 +51,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
+            '/app/backend/patitas_a_casa/templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
