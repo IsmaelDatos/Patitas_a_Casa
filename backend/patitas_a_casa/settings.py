@@ -4,7 +4,7 @@ import os
 DEBUG = True
 SECRET_KEY = 'supersecretkey12345'
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-BASE_DIR = Path(__file__).resolve().parent.parent 
+BASE_DIR = Path(__file__).resolve().parent.parent
 AUTH_USER_MODEL = 'usuarios.Usuario'
 PROJECT_ROOT = BASE_DIR.parent
 FRONTEND_DIR = os.path.join(PROJECT_ROOT, 'frontend')
@@ -51,7 +51,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            '/app/backend/patitas_a_casa/templates',
+            os.path.join(BASE_DIR, 'patitas_a_casa/templates'),  # Ruta absoluta correcta
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -103,7 +103,7 @@ USE_L10N = True
 USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'patitas_a_casa/static'),
 ]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
@@ -114,5 +114,5 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 ALLOWED_HOSTS = ['*']
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

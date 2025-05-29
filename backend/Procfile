@@ -1,1 +1,1 @@
-web: gunicorn patitas_a_casa.wsgi --pythonpath backend
+web: cd backend && gunicorn patitas_a_casa.wsgi --pythonpath .
