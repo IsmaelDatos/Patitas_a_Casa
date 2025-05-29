@@ -7,7 +7,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 BASE_DIR = Path(__file__).resolve().parent.parent
 AUTH_USER_MODEL = 'usuarios.Usuario'
 PROJECT_ROOT = BASE_DIR.parent
-FRONTEND_DIR = PROJECT_ROOT.parent / 'frontend'  
+FRONTEND_DIR = os.path.join(PROJECT_ROOT, 'frontend')
 
 # DATABASES = {
 #     'default': {
@@ -81,7 +81,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(FRONTEND_DIR, 'templates'),  # Ahora apunta correctamente a frontend/templates/
+            os.path.join(BASE_DIR, '../frontend/templates'),  # Ruta absoluta
         ],
         'APP_DIRS': True,
         'OPTIONS': {
