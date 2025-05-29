@@ -4,22 +4,10 @@ import os
 DEBUG = True
 SECRET_KEY = 'supersecretkey12345'
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent 
 AUTH_USER_MODEL = 'usuarios.Usuario'
 PROJECT_ROOT = BASE_DIR.parent
 FRONTEND_DIR = os.path.join(PROJECT_ROOT, 'frontend')
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'patitas_a_casa',
-#         'USER': 'ismael',
-#         #'PASSWORD': 'MAEL02005=()/',
-#         'PASSWORD': 'isma123',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
 
 DATABASES = {
     'default': {
@@ -59,29 +47,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'patitas_a_casa.urls'
 
-# TEMPLATES = [
-#     {
-#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-#         'DIRS': [
-#             os.path.join(BASE_DIR, 'frontend/templates'),  
-#             os.path.join(BASE_DIR, 'frontend/templates/avistamiento'),
-#         ],
-#         'APP_DIRS': True,
-#         'OPTIONS': {
-#             'context_processors': [
-#                 'django.template.context_processors.debug',
-#                 'django.template.context_processors.request',
-#                 'django.contrib.auth.context_processors.auth',
-#                 'django.contrib.messages.context_processors.messages',
-#             ],
-#         },
-#     },
-# ]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, '../frontend/templates'),  # Ruta absoluta
+            os.path.join(BASE_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -133,7 +103,7 @@ USE_L10N = True
 USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(FRONTEND_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
@@ -144,5 +114,5 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 ALLOWED_HOSTS = ['*']
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
