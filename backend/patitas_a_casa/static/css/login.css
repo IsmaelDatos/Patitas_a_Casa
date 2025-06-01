@@ -1,0 +1,86 @@
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 100px);
+        }
+        
+        .login-form {
+            background-color: #b5a9ff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .login-form h1 {
+            text-align: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.05em;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #8a6ff0;
+            border-radius: 0.5rem;
+        }
+        
+        .login-form button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #5A3CE8;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+        
+        .login-form a {
+            color: #5A3CE8;
+            text-decoration: none;
+        }
+        
+        .login-form .text-center {
+            text-align: center;
+        }
+        
+        .errorlist {
+            color: #ff0000;
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+        
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            text-align: center;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .alert-error {
+            background-color: #ff4444;
+        }
+        
+        .alert-success {
+            background-color: #00C851;
+        }
+        
+        .alert-info {
+            background-color: #33b5e5;
+        }
+        
+        .alert-warning {
+            background-color: #ffbb33;
+        }

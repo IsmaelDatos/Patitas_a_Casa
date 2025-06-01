@@ -1,34 +1,29 @@
 from pathlib import Path
 import os
-DEBUG = True
-SECRET_KEY = 'supersecretkey12345'
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-AUTH_USER_MODEL = 'usuarios.Usuario'
+import dj_database_url
+from dotenv import load_dotenv
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'patitas_a_casa',
-#         'USER': 'ismael',
-#         #'PASSWORD': 'MAEL02005=()/',
-#         'PASSWORD': 'isma123',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
+load_dotenv()
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('PGDATABASE', 'patitas_a_casa'), 
-        'USER': os.getenv('PGUSER', 'ismael'),          
-        'PASSWORD': os.getenv('PGPASSWORD', 'isma123'), 
-        'HOST': os.getenv('PGHOST', 'localhost'),
-        'PORT': os.getenv('PGPORT', '5432'),
-    }
-}
+SECRET_KEY = 'q+^7w!_-wtx85j2*8-s(8ijn!axonwbdyiym#v+qo$j2rgy9%='
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+ALLOWED_HOSTS = []
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+ALLOWED_HOSTS.extend([
+    'patitas-a-casa.onrender.com',
+    'localhost',
+    '127.0.0.1'
+])
+
+DEBUG = False
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -36,17 +31,21 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
-    'patitas_a_casa.apps.perros',
-    'patitas_a_casa.apps.adopciones',
-    'patitas_a_casa.apps.perros.Avistamiento_Perros.apps.AvistamientoPerrosConfig',
-    'patitas_a_casa.apps.usuarios',
     'rest_framework',
+    'corsheaders',
+    'patitas_a_casa.apps.usuarios',
+    'patitas_a_casa.apps.adopciones',
+    'patitas_a_casa.apps.perros',
+    'patitas_a_casa.apps.perros.Avistamiento_Perros',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -59,7 +58,7 @@ ROOT_URLCONF = 'patitas_a_casa.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'frontend/templates')],
+        'DIRS': [BASE_DIR / 'patitas_a_casa' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,20 +70,24 @@ TEMPLATES = [
         },
     },
 ]
+
 WSGI_APPLICATION = 'patitas_a_casa.wsgi.application'
 
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgresql://isma:OSUgkccoT2v5RwGSB1grbbrUT706rdcv@dpg-d0uautqdbo4c73aq86pg-a.oregon-postgres.render.com/patitasacasa',
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
+
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        'OPTIONS': {
-            'min_length': 8,
-        }
-    },
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 8}
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -94,30 +97,39 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-PASSWORD_HASHERS = [
-    'django.contrib.auth.hashers.Argon2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-    'django.contrib.auth.hashers.ScryptPasswordHasher',
-]
-
 LANGUAGE_CODE = 'es-mx'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Mexico_City'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    '/home/ismael/Desktop/Patitas_a_Casa/frontend/static',
-]
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'patitas_a_casa' / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  
+MEDIA_ROOT = BASE_DIR / 'media'
+
+AUTH_USER_MODEL = 'usuarios.Usuario'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
-ALLOWED_HOSTS = ['*']
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ]
+}
+
+CORS_ALLOWED_ORIGINS = [
+    "https://patitas-a-casa.onrender.com",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
+CORS_ALLOW_CREDENTIALS = True
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
