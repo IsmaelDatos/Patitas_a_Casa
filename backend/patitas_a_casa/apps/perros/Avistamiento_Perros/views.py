@@ -14,7 +14,18 @@ def home(request):
     return render(request, 'home.html')
 
 def determinar_tipo_usuario(request):
-    return request.user  # Usa directamente el usuario autenticado
+    """Determina el tipo de usuario basado en si tiene un albergue asociado"""
+    if not request.user.is_authenticated:
+        return None
+    
+    try:
+        # Si el usuario tiene un albergue asociado, es un albergue
+        albergue = Albergue.objects.get(usuario=request.user)
+        return albergue
+    except Albergue.DoesNotExist:
+        # Si no tiene albergue, es un usuario normal
+        return request.user
+
 class AvistamientoAnonimoCreateView(CreateView):
     model = AvistamientoPerro
     form_class = AvistamientoAnonimoForm
@@ -34,7 +45,7 @@ class AvistamientoAnonimoCreateView(CreateView):
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'success': False, 'errors': form.errors})
         return super().form_invalid(form)
-    
+
 @method_decorator(login_required, name='dispatch')
 class AvistamientoPersonaCreateView(CreateView):
     model = AvistamientoPerro
@@ -43,18 +54,20 @@ class AvistamientoPersonaCreateView(CreateView):
     success_url = reverse_lazy('avistamiento_exito')
     
     def form_valid(self, form):
-        usuario = Usuario.objects.get(usuario=self.request.user)
-        form.instance.reportado_por_usuario = usuario
+        # Corregido: El usuario ya está en request.user, no necesita buscar en Usuario
+        form.instance.reportado_por_usuario = self.request.user
         messages.success(self.request, "¡Gracias por reportar este avistamiento! Tu ayuda es invaluable para reunir a las mascotas con sus familias.")
         return super().form_valid(form)
     
     def dispatch(self, request, *args, **kwargs):
+        # Verificar que el usuario no sea un albergue
         try:
-            request.user 
+            Albergue.objects.get(usuario=request.user)
+            messages.error(request, "Los albergues deben usar el formulario específico para albergues.")
+            return redirect('crear_avistamiento_albergue')
+        except Albergue.DoesNotExist:
+            # Si no es albergue, puede usar este formulario
             return super().dispatch(request, *args, **kwargs)
-        except Usuario.DoesNotExist:
-            messages.error(request, "No tienes permiso para acceder a esta página. Esta función es solo para personas físicas.")
-            return redirect('home')
 
 @method_decorator(login_required, name='dispatch')
 class AvistamientoAlbergueCreateView(CreateView):
@@ -86,10 +99,10 @@ def avistamiento_router(request):
     
     tipo_usuario = determinar_tipo_usuario(request)
     
-    if isinstance(tipo_usuario, Usuario):
-        return redirect('crear_avistamiento_persona')
-    elif isinstance(tipo_usuario, Albergue):
+    if isinstance(tipo_usuario, Albergue):
         return redirect('crear_avistamiento_albergue')
+    elif isinstance(tipo_usuario, Usuario):
+        return redirect('crear_avistamiento_persona')
     else:
         messages.warning(request, "No se pudo determinar tu tipo de usuario. Por favor, completa tu perfil.")
         return redirect('home')
