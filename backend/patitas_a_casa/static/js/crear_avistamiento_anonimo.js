@@ -1,3 +1,4 @@
+/* Función para los identificadores */
     function mostrarCampos() {
       var identificador = document.getElementById("identificador").value;
       var color_collar = document.getElementById("color_collar");
