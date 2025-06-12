@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-from .forms import RegistroForm, LoginForm, AlbergueForm
+from .forms import RegistroForm, LoginForm, AlbergueForm, PerfilForm
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.db import transaction
+from django.contrib.auth.decorators import login_required
 
 def registro_view(request):
     if request.method == 'POST':
@@ -96,3 +97,14 @@ def perfil_ciudadano(request):
 
 def perfil_albergue(request):
     return render(request, 'perfil/perfil_albergue.html', {'user': request.user})
+
+@login_required
+def editar_perfil(request):
+    if request.method == 'POST':
+        form = PerfilForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('usuarios:perfil_ciudadano')
+    else:
+        form = PerfilForm(instance=request.user)
+    return render(request, 'perfil/editar_perfil.html', {'form': form})

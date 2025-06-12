@@ -1,8 +1,8 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from .models import Usuario, Albergue
 import re  
-from django.core.exceptions import ValidationError   
+from django.core.exceptions import ValidationError
 
 class RegistroForm(UserCreationForm):
     es_albergue = forms.BooleanField(
@@ -62,3 +62,25 @@ class LoginForm(AuthenticationForm):
         'invalid_login': "Por favor ingrese credenciales válidas. Note que ambos campos pueden ser sensibles a mayúsculas.",
         'inactive': "Esta cuenta está inactiva.",
     }
+    
+class PerfilForm(UserChangeForm):
+    phone = forms.CharField(
+        label="Teléfono",
+        max_length=15,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    
+    class Meta:
+        model = Usuario
+        fields = ['first_name', 'last_name', 'email', 'phone']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Eliminamos el campo de contraseña que viene por defecto en UserChangeForm
+        self.fields.pop('password')

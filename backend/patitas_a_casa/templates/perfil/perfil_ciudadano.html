@@ -1,0 +1,152 @@
+{% load static %}
+<html lang="es">
+<head>
+  {% include 'navbar.html' %}
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Patitas a casa - Mi perfil</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="{% static 'css/perfil_ciudadano.css' %}">
+</head>
+<body class="bg-gray-100 p-4">
+  <main class="mt-6 max-w-full">
+   <div class="mb-3">
+    <h1 class="font-bold text-2xl leading-tight select-none">
+     Bienvenido {{ user.first_name|default:user.username }},
+    </h1>
+    <h1 class="font-bold text-2xl leading-tight select-none">
+     ¿qué deseas hacer hoy?
+    </h1>
+   </div>
+   <div class="flex flex-wrap gap-4 mb-4">
+    <a href=
+    {% comment %} "{% url 'adopciones:listar' %}" {% endcomment %}
+    "#"
+     class="bg-[#5A5AC9] text-white font-bold rounded-full px-6 py-2 select-none">
+     Adoptar
+    </a>
+    <a href=
+    {% comment %} "{% url 'registro_perro:crear' %}" {% endcomment %}
+    "#"
+    class="bg-[#5A5AC9] text-white font-bold rounded-full px-6 py-2 select-none">
+     Perdi a mi perro
+    </a>
+    <a href="{% url 'avistamiento_perros:reportar_avistamiento' %}"
+    class="bg-[#5A5AC9] text-white font-bold rounded-full px-6 py-2 select-none">
+     Vi un perro perdido
+    </a>
+    <a href="{% url 'usuarios:editar_perfil' %}" class="bg-[#5A5AC9] text-white font-bold rounded-full px-6 py-2 select-none">
+     Editar Perfil
+    </a>
+   </div>
+   
+   {% if mis_perros %}
+   <h2 class="font-extrabold text-lg mb-2 select-none">
+    Seguimiento de mis registros
+   </h2>
+   {% for perro in mis_perros %}
+   <section class="flex flex-col sm:flex-row items-center sm:items-start bg-[#B5A6FF] rounded-2xl border-4 border-[#2E3192] p-4 gap-4 max-w-full mb-4">
+    <div class="flex flex-col items-center min-w-[120px]">
+     <div class="image-placeholder rounded-lg w-[120px] h-[120px]">
+      {% if perro.foto %}
+        <img src="{{ perro.foto.url }}" alt="{{ perro.nombre }}" class="w-full h-full object-cover rounded-lg">
+      {% else %}
+        IMAGEN
+      {% endif %}
+     </div>
+     <button class="mt-2 bg-[#5A5AC9] text-white font-bold rounded-full px-6 py-1 select-none">
+      {{ perro.nombre }}
+     </button>
+    </div>
+    <div class="flex flex-col flex-1 justify-between h-full min-w-[200px]">
+     <p class="font-extrabold text-xl select-none">
+      {{ perro.raza }}, {{ perro.edad }} años
+      <br>
+      Última vez visto: {{ perro.ultima_vez_visto }}
+      <br>
+      Estado: {{ perro.get_estado_display }}
+     </p>
+     <div class="flex gap-3 mt-4 flex-wrap">
+      {% if perro.estado != 'ENCONTRADO' %}
+      <a href=
+      "#"
+      {% comment %} "{% url 'registro_perro:marcar_encontrado' perro.id %}" {% endcomment %}
+       class="bg-[#7AC943] text-white font-extrabold rounded-full px-5 py-1 select-none">
+       Marcar como encontrado
+      </a>
+      {% endif %}
+      <a href=
+      "#"
+      {% comment %} "{% url 'registro_perro:eliminar' perro.id %}" {% endcomment %}
+       class="bg-[#FF4B00] text-white font-extrabold rounded-full px-5 py-1 select-none">
+       Eliminar
+      </a>
+      <a href=
+      "#"
+      {% comment %} "{% url 'registro_perro:editar' perro.id %}" {% endcomment %}
+       class="bg-[#5A5AC9] text-white font-extrabold rounded-full px-5 py-1 select-none">
+       Editar
+      </a>
+     </div>
+    </div>
+   </section>
+   {% endfor %}
+   {% endif %}
+  </main>
+
+  <!-- Contenido del segundo código -->
+  <main class="max-w-[900px] mx-auto mt-6">
+   <div class="flex justify-between items-center mb-4">
+    <h2 class="text-gray-500 text-xl font-semibold select-none">
+     Algunos usuarios han encontrado perros.
+    </h2>
+    <a href=
+    "#"
+    {% comment %} "{% url 'avistamiento_perros:listar' %}" {% endcomment %}
+    class="text-[#5A5AC9] font-bold">Ver más</a>
+   </div>
+   <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+    {% for avistamiento in avistamientos_recientes %}
+    <article class="bg-[#A9A4FF] rounded-xl border-4 border-[#2B2B5F] p-2 flex flex-col items-center">
+     <div class="image-placeholder rounded-t-xl w-[160px] h-[140px]">
+      {% if avistamiento.foto %}
+        <img src="{{ avistamiento.foto.url }}" alt="{{ avistamiento.nombre }}" class="w-full h-full object-cover rounded-t-xl">
+      {% else %}
+        IMAGEN
+      {% endif %}
+     </div>
+     <div class="w-full mt-1 text-black text-sm font-bold leading-tight">
+      <p class="text-center font-extrabold mb-1">
+       {{ avistamiento.nombre|default:"Desconocido" }}
+      </p>
+      <p class="text-left">
+       Edad: {{ avistamiento.edad|default:"Desconocida" }}<br/>
+       Raza: {{ avistamiento.raza|default:"Desconocida" }}<br/>
+       Visto el: {{ avistamiento.fecha_avistamiento }}<br/>
+       Visto en: {{ avistamiento.ubicacion }}
+      </p>
+     </div>
+     <div class="flex gap-2 mt-auto pt-2 w-full justify-between">
+      <a href=
+      "#"
+      {% comment %} "{% url 'avistamiento_perros:reclamar' avistamiento.id %}" {% endcomment %}
+       class="bg-[#7AC943] text-white font-extrabold rounded-full px-3 py-1 text-sm whitespace-nowrap select-none w-full text-center">
+       Es mio
+      </a>
+      <a href=
+      "#"
+      {% comment %} "{% url 'avistamiento_perros:detalle' avistamiento.id %}" {% endcomment %}
+       class="bg-[#FF4B00] text-white font-extrabold rounded-full px-3 py-1 text-sm whitespace-nowrap select-none w-full text-center">
+       Detalles
+      </a>
+     </div>
+    </article>
+    {% empty %}
+    <p class="col-span-4 text-center">No hay avistamientos recientes</p>
+    {% endfor %}
+   </section>
+  </main>
+ </body>
+</html>

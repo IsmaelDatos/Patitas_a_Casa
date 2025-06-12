@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Patitas a casa - Registro de Albergue</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/registro.css' %}">
+</head>
+<body class="bg-gray-100">
+    {% include 'navbar.html' %}
+    
+    <div class="form-container">
+        <div class="form-box">
+            <h1 class="form-title">Crear cuenta</h1>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <div class="form-toggle">
+                <button id="persona-btn" class="toggle-button active" onclick="toggleForm('persona')">Persona</button>
+                <button id="albergue-btn" class="toggle-button" onclick="toggleForm('albergue')">Albergue</button>
+            </div>
+            
+            <!-- Formulario para Persona -->
+            <form id="persona-form" method="post" action="{% url 'usuarios:registro' %}">
+                {% csrf_token %}
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-user"></i> Información personal
+                    </div>
+                    
+                    {{ form.non_field_errors }}
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="id_first_name">Nombre</label>
+                            <input class="form-input" id="id_first_name" type="text" name="first_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="id_last_name">Apellido</label>
+                            <input class="form-input" id="id_last_name" type="text" name="last_name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_email">Correo electrónico</label>
+                        <input class="form-input" id="id_email" type="email" name="email" required>
+                        {{ form.email.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_username">Nombre de usuario</label>
+                        <input class="form-input" id="id_username" type="text" name="username" required>
+                        {{ form.username.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_phone">Teléfono</label>
+                        <input class="form-input" id="id_phone" type="tel" name="phone">
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="form-group">
+                        <label class="form-label" for="id_password1">Contraseña</label>
+                        <input class="form-input" id="id_password1" type="password" name="password1" required>
+                        {{ form.password1.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_password2">Confirmar contraseña</label>
+                        <input class="form-input" id="id_password2" type="password" name="password2" required>
+                        {{ form.password2.errors }}
+                    </div>
+                </div>
+                
+                <button class="form-button" type="submit">Registrarse como Persona</button>
+                
+                <div class="form-footer">
+                    ¿Ya tienes una cuenta? <a href="{% url 'usuarios:login' %}" class="form-link">Inicia sesión</a>
+                </div>
+            </form>
+            
+            <!-- Formulario para Albergue -->
+            <form id="albergue-form" class="hidden" method="post" action="{% url 'usuarios:registro' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="es_albergue" value="on">
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-home"></i> Información del albergue
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_nombre">Nombre del albergue</label>
+                        <input class="form-input" id="id_nombre" type="text" name="nombre" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_email">Correo electrónico</label>
+                        <input class="form-input" id="id_email" type="email" name="email" required>
+                        {{ form.email.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_username">Nombre de usuario</label>
+                        <input class="form-input" id="id_username" type="text" name="username" required>
+                        {{ form.username.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_telefono">Teléfono de contacto</label>
+                        <input class="form-input" id="id_telefono" type="tel" name="telefono" required>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-map-marker-alt"></i> Ubicación del albergue
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="id_calle">Calle</label>
+                            <input class="form-input" id="id_calle" type="text" name="calle" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="id_num_ext">Número exterior</label>
+                            <input class="form-input" id="id_num_ext" type="text" name="num_ext" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_num_int">Número interior (opcional)</label>
+                        <input class="form-input" id="id_num_int" type="text" name="num_int">
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="id_entidad">Entidad Federativa</label>
+                            <select class="form-select" id="id_entidad" name="entidad" required>
+                                <option value="">Seleccione una entidad</option>
+                                <option value="CDMX">Ciudad de México</option>
+                                <option value="EDOMEX">Estado de México</option>
+                                <option value="JAL">Jalisco</option>
+                                <option value="NL">Nuevo León</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="id_alcaldia">Alcaldía/Municipio</label>
+                            <select class="form-select" id="id_alcaldia" name="alcaldia" required>
+                                <option value="">Seleccione una alcaldía</option>
+                                <!-- Opciones se llenarán con JavaScript -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_codigo_postal">Código Postal</label>
+                        <input class="form-input" id="id_codigo_postal" type="text" name="codigo_postal" pattern="\d{5}" maxlength="5" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_referencias">Referencias</label>
+                        <textarea class="form-input" id="id_referencias" name="referencias" rows="2"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-paw"></i> Capacidad y servicios
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label class="form-label" for="id_animales_actuales">Animales actualmente en el albergue</label>
+                            <input class="form-input" id="id_animales_actuales" type="number" name="animales_actuales" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="id_capacidad_maxima">Capacidad máxima</label>
+                            <input class="form-input" id="id_capacidad_maxima" type="number" name="capacidad_maxima" min="1" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Servicios ofrecidos</label>
+                        <div class="services-grid">
+                            <div class="service-checkbox">
+                                <input type="checkbox" id="id_servicio_vacunacion" name="servicios" value="vacunacion">
+                                <label for="id_servicio_vacunacion">Vacunación</label>
+                            </div>
+                            <div class="service-checkbox">
+                                <input type="checkbox" id="id_servicio_esterilizacion" name="servicios" value="esterilizacion">
+                                <label for="id_servicio_esterilizacion">Esterilización</label>
+                            </div>
+                            <div class="service-checkbox">
+                                <input type="checkbox" id="id_servicio_adopcion" name="servicios" value="adopcion">
+                                <label for="id_servicio_adopcion">Adopción</label>
+                            </div>
+                            <div class="service-checkbox">
+                                <input type="checkbox" id="id_servicio_rescate" name="servicios" value="rescate">
+                                <label for="id_servicio_rescate">Rescate</label>
+                            </div>
+                            <div class="service-checkbox">
+                                <input type="checkbox" id="id_servicio_estetica" name="servicios" value="estetica">
+                                <label for="id_servicio_estetica">Estética</label>
+                            </div>
+                            <div class="service-checkbox">
+                                <input type="checkbox" id="id_servicio_hospedaje" name="servicios" value="hospedaje">
+                                <label for="id_servicio_hospedaje">Hospedaje</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-camera"></i> Foto del albergue
+                    </div>
+                    
+                    <label for="id_foto" class="file-upload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span id="file-text" class="file-upload-text">Haz clic para subir una foto</span>
+                        <input class="file-input" id="id_foto" type="file" name="foto" accept="image/*">
+                    </label>
+                </div>
+                
+                <div class="password-section">
+                    <div class="form-group">
+                        <label class="form-label" for="id_password1">Contraseña</label>
+                        <input class="form-input" id="id_password1" type="password" name="password1" required>
+                        {{ form.password1.errors }}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="id_password2">Confirmar contraseña</label>
+                        <input class="form-input" id="id_password2" type="password" name="password2" required>
+                        {{ form.password2.errors }}
+                    </div>
+                </div>
+                
+                <button class="form-button" type="submit">Registrar Albergue</button>
+                
+                <div class="form-footer">
+                    ¿Ya tienes una cuenta? <a href="{% url 'usuarios:login' %}" class="form-link">Inicia sesión aquí</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<script src="{% static 'js/registro.js' %}"></script>
+</body>
+</html>
