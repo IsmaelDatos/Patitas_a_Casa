@@ -24,4 +24,5 @@ urlpatterns = [
     path('accounts/registro/', usuarios_views.registro_view, name='registro'),
     path('usuarios/', include('patitas_a_casa.apps.usuarios.urls')),
     path('avistamiento/', include('patitas_a_casa.apps.perros.Avistamiento_Perros.urls', namespace='avistamiento_perros')),
+    path('adopcion/', include('patitas_a_casa.apps.adopciones.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

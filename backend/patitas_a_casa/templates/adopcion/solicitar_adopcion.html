@@ -1,0 +1,48 @@
+{% include 'navbar.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/adopcion.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="adopcion-container">
+    <h1 class="adopcion-title">Solicitud de adopción para {{ perro.nombre }}</h1>
+    
+    <div class="perro-card mb-6">
+        <div class="flex items-center space-x-4 p-4">
+            <img src="{{ perro.foto.url }}" alt="{{ perro.nombre }}" class="w-24 h-24 object-cover rounded">
+            <div>
+                <h2 class="perro-name">{{ perro.nombre }}</h2>
+                <p class="perro-details">{{ perro.get_sexo_display }} - {{ perro.get_tamaño_display }} - {{ perro.raza }}</p>
+                <p class="perro-details">{{ perro.edad }} años</p>
+            </div>
+        </div>
+    </div>
+    
+    <form method="post" class="adopcion-form">
+        {% csrf_token %}
+        
+        <div class="space-y-4">
+            {% for field in form %}
+            <div class="form-group">
+                <label class="form-label" for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+                <textarea class="form-textarea" id="{{ field.id_for_label }}" 
+                          name="{{ field.name }}" required>{{ field.value|default:'' }}</textarea>
+                {% if field.errors %}
+                <p class="error-message">{{ field.errors.0 }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-6">
+            <button type="submit" class="submit-btn">
+                Enviar solicitud
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% include 'navbar.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/adopcion.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="adopcion-container">
+    <h1 class="adopcion-title">Dar perro en adopción</h1>
+    
+    <form method="post" enctype="multipart/form-data" class="adopcion-form">
+        {% csrf_token %}
+        
+        <div class="form-grid">
+            {% for field in form %}
+            <div class="form-group">
+                <label class="form-label" for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+                {% if field.field.widget.input_type == 'textarea' %}
+                <textarea class="form-textarea" id="{{ field.id_for_label }}" name="{{ field.name }}">{{ field.value|default:'' }}</textarea>
+                {% else %}
+                <input class="form-input" type="{{ field.field.widget.input_type }}" 
+                       id="{{ field.id_for_label }}" name="{{ field.name }}" 
+                       value="{{ field.value|default:'' }}" {% if field.field.required %}required{% endif %}>
+                {% endif %}
+                {% if field.errors %}
+                <p class="error-message">{{ field.errors.0 }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-6">
+            <button type="submit" class="submit-btn">
+                Publicar para adopción
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% include 'navbar.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/adopcion.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="adopcion-container">
+    <h1 class="adopcion-title">Perros disponibles para adopción</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for perro in perros %}
+        <div class="perro-card">
+            <img src="{{ perro.foto.url }}" alt="{{ perro.nombre }}" class="perro-img">
+            <div class="perro-info">
+                <h2 class="perro-name">{{ perro.nombre }}</h2>
+                <p class="perro-details">{{ perro.get_sexo_display }} - {{ perro.get_tamaño_display }}</p>
+                <p class="perro-details">{{ perro.edad }} años - {{ perro.raza }}</p>
+                <p class="perro-description">{{ perro.descripcion|truncatechars:100 }}</p>
+                
+                <div class="perro-status">
+                    <span class="perro-tags">
+                        {% if perro.esterilizado %}Esterilizado{% else %}No esterilizado{% endif %} | 
+                        {% if perro.vacunas %}Vacunado{% else %}Sin vacunas{% endif %}
+                    </span>
+                    <a href="{% url 'adopciones:solicitar_adopcion' perro.id %}" 
+                       class="adopt-btn">
+                        Adoptar
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-3 text-center py-8">
+            <p class="text-gray-500">No hay perros disponibles para adopción en este momento.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
