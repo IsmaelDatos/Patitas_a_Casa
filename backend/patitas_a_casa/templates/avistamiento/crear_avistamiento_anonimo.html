@@ -41,13 +41,14 @@
             <label for="alcaldia" class="block text-gray-700 font-medium mb-2">
               Alcaldía/Municipio *
             </label>
-            <select id="municipio_alcaldia" name="municipio_alcaldia" class="w-full p-2 border border-gray-300 rounded-md" required>
+            <select id="municipio_alcaldia" name="municipio_alcaldia" class="w-full p-2 border border-gray-300 rounded-md" onchange = "loadMunic()" required>
               <option value="" disabled selected>Selecciona una alcaldía</option>
               <option value="Álvaro Obregón">Álvaro Obregón</option>
               <option value="Azcapotzalco">Azcapotzalco</option>
               <option value="Benito Juárez">Benito Juárez</option>
-              <option value="Cuauhtémoc">Cuauhtémoc</option>
-              <option value="Coyoacán">Coyoacán</option>
+              <option value="Coyoacan">Coyoacán</option>
+              <option value="Cuajimalpa de Morelos">Cuajimalpa de Morelos</option>
+              <option value="Cuauhtemoc">Cuauhtémoc</option>
               <option value="Gustavo A. Madero">Gustavo A. Madero</option>
               <option value="Iztacalco">Iztacalco</option>
               <option value="Iztapalapa">Iztapalapa</option>
@@ -72,7 +73,7 @@
             <label for="colonia" class="block text-gray-700 font-medium mb-2">
               Colonia *
             </label>
-            <input type="text" id="colonia" name="colonia" maxlength="80" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Nombre de la colonia" required/>
+            <select id="colonia" name="colonia" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Nombre de la colonia" required></select>
           </div>
 
           <div class="mb-4">
@@ -106,7 +107,7 @@
             <label for="raza" class="block text-gray-700 font-medium mb-2">
               Raza *
             </label>
-            <select id="raza" name="raza" class="w-full p-2 border border-gray-300 rounded-md" required>
+            <select id="raza" name="raza" class="w-full p-2 border border-gray-300 rounded-md" onchange = "mostrarPerros()" required>
               <option value="" disabled selected>Selecciona una raza</option>
               <option value="Afghan Hound">Afghan Hound</option>
               <option value="Akita">Akita</option>
@@ -141,7 +142,6 @@
               <option value="Doberman Pinscher">Doberman Pinscher</option>
               <option value="Dogo Argentino">Dogo Argentino</option>
               <option value="English Bulldog">English Bulldog</option>
-              <option value="English Cocker Spaniel">English Cocker Spaniel</option>
               <option value="English Setter">English Setter</option>
               <option value="Finnish Lapphund">Finnish Lapphund</option>
               <option value="Flat-Coated Retriever">Flat-Coated Retriever</option>
@@ -207,6 +207,318 @@
               <option value="Otra">Otra</option>
             </select>
           </div>
+          
+          <div id = "afgano" style = "display:none;" class = "mt-2">
+          	<img src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTG_je_J237j3g5N96RX4CE7CklVk1rgC_vdg&s" />
+          </div>
+              
+          <div id = "akito" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/d/d4/Akita_Americano_v3.jpg" />
+          </div>
+          <div id = "akito_inu" style = "display:none;" class = "mt-2">
+          	<img src = "https://welovedogz.hu/media/images/2021_05_gettyimages-1198300893.2e16d0ba.fill-10000x10000.jpg" />
+          </div>
+          <div id = "alasko_klee" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.mascotarios.org/wp-content/uploads/2011/04/Alaskan.jpg.webp" />
+          </div>
+          <div id = "alasko_malamu" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.shutterstock.com/image-photo/fluffy-alaskan-malamute-puppy-walking-600nw-2152167253.jpg" />
+          </div>
+          <div id = "americano_buldog" style = "display:none;" class = "mt-2">
+          	<img src = "https://animalxop.com/cdn/shop/articles/de6e9740-92c2-4d5b-ad3a-a0f84b726cc6_345x300_crop_center.png?v=1701897649" />
+          </div>
+          <div id = "amer_pitbull_terrier" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.hundeo.com/wp-content/uploads/2019/11/American-Pitbull-liegt.jpg" />
+          </div>
+          
+          <div id = "autral_cattle_dog" style = "display:none;" class = "mt-2">
+          	<img src = "https://content.lyka.com.au/f/1016262/2013x1490/ba65599b2c/blue-heeler-in-a-forest.jpg/m/640x427/smart" />
+          </div>
+          <div id = "austral_sheper" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.dogster.com/wp-content/uploads/2022/03/Australian-Shepherd-breed-sitting-on-the-stone_ChocoPie-Shutterstock.jpg" />
+          </div>
+          <div id = "austral_terr" style = "display:none;" class = "mt-2">
+          	<img src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMAkOc5EE5DIwcpjo6K4TNCtJcF1kLYdvRQQ&s" />
+          </div>
+          
+          <div id = "basetjaund" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.purina.es/sites/default/files/styles/ttt_image_510/public/2024-02/sitesdefaultfilesstylessquare_medium_440x440public2022-09basset20hound.jpg?itok=PL3UTj5y" />
+          </div>
+          <div id = "basenji" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.mascotarios.org/wp-content/uploads/2011/04/Basenji.jpg" />
+          </div>
+          <div id = "biguol" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.hola.com/horizon/landscape/32bfc86e8e11-portada-beagle-t.jpg?im=Resize=(640),type=downsize" />
+          </div>
+          <div id = "berded_coli" style = "display:none;" class = "mt-2">
+          	<img src = "https://pet-health-content-media.chewy.com/wp-content/uploads/2024/09/11163714/202106bearded-collie-5.jpg" />
+          </div>
+          <div id = "belgian_malinosis" style = "display:none;" class = "mt-2">
+          	<img src = "https://i.pinimg.com/564x/cf/b4/a9/cfb4a9677a59ee4986fe066c623430bd.jpg" />
+          </div>
+          
+          <div id = "bichon" style = "display:none;" class = "mt-2">
+          	<img src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyeegF1eLAqp_3TW0v7afDmlvH12UCfRc2irZuJvxqgm6UQS2P8gcvv0WY-bOb8ttBOwQ&usqp=CAU" />
+          </div>
+          <div id = "border_colli" style = "display:none;" class = "mt-2">
+          	<img src = "https://elitebordercollie.com/wp-content/uploads/2023/06/Border-collie-colores.jpg.webp" />
+          </div>
+          <div id = "border_terrier" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Border_Terrier.jpg/250px-Border_Terrier.jpg" />
+          </div>
+          <div id = "boston_terrier" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Boston-terrier-carlos-de.JPG/960px-Boston-terrier-carlos-de.JPG" />
+          </div>
+          <div id = "boxer" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Male_fawn_Boxer_undocked.jpg/1200px-Male_fawn_Boxer_undocked.jpg" />
+          </div>
+          <div id = "bull_terrier" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/4/4c/Bullterrier-3453301920.jpg" />
+          </div>
+          <div id = "bullmastiff" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Bullmastiff_edited.JPG/1200px-Bullmastiff_edited.JPG" />
+          </div>
+          
+          <div id = "cairn" style = "display:none;" class = "mt-2">
+          	<img src = "https://cdn.wamiz.fr/cdn-cgi/image/format=auto,quality=80,width=1200,height=675,fit=cover/animal/breed/dog/adult/6659e529142ec416470360.jpg" />
+          </div>
+          <div id = "cardigan" style = "display:none;" class = "mt-2">
+          	<img src = "https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2016/08/01093647/Cardigan-Welsh-Corgi-standing-outdoors.jpg" />
+          </div>
+          <div id = "chihuahua" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Chihuahuasmoothcoat.jpg/250px-Chihuahuasmoothcoat.jpg" />
+          </div>
+          <div id = "cocker_spaniel" style = "display:none;" class = "mt-2">
+          	<img src = "https://pcdn.bellfordev.pro/image/cache/catalog/Blog/Blog-Pictures/cocker-spaniel-w690-h690.jpg" />
+          </div>
+          <div id = "cocker_spaniel_ingles" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/a/a0/English_Cocker_Simon_Left.jpg" />
+          </div>
+          <div id = "collie" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/4/48/Rough_Collie_600.jpg" />
+          </div>
+          
+          <div id = "dalmata" style = "display:none;" class = "mt-2">
+          	<img src = "https://evidensia.es/getmedia/2aca612f-65c4-4eaf-a047-a6c99730b18e/dalmata_2.webp" />
+          </div>
+          <div id = "dachshund" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/MiniDachshund1_wb.jpg/420px-MiniDachshund1_wb.jpg" />
+          </div>
+          <div id = "doberman_pinscher" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.lavanguardia.com/files/content_image_mobile_filter/uploads/2024/03/08/65eb0432422d3.jpeg" />
+          </div>
+          <div id = "dogo_arg" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/9/92/Dogo_argentino_sylwetka.jpg" />
+          </div>
+              
+          <div id = "bulldog_eng" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Racib%C3%B3rz_2007_082.jpg/1200px-Racib%C3%B3rz_2007_082.jpg" />
+          </div>
+          <div id = "setter_eng" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/7/71/English_setter.jpg" />
+          </div>
+          <div id = "finish_lapp" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Finnish_Lapphund_Glenchess_Revontuli.jpg/640px-Finnish_Lapphund_Glenchess_Revontuli.jpg" />
+          </div>
+          <div id = "Retriver_flat_cot" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/a/aa/Flat_Coated_Retriever_-_black.jpg" />
+          </div>
+          <div id = "fox_terrier" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Elias1%C4%8Derven2006.jpg/330px-Elias1%C4%8Derven2006.jpg" />
+          </div>
+          <div id = "bulldog_fr" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Confucius_De_la_Parure.jpg/250px-Confucius_De_la_Parure.jpg" />
+          </div>
+          
+          <div id = "german_p" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/3/38/Duitse_staande_korthaar_10-10-2.jpg" />
+          </div>
+          <div id = "pastorAl" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Cane_da_pastore_tedesco_adulto.jpg/640px-Cane_da_pastore_tedesco_adulto.jpg" />
+          </div>
+          <div id = "Esnauser_gigan" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/6/6a/GiantSchnauzer.jpg" />
+          </div>
+          <div id = "golden_retriver" style = "display:none;" class = "mt-2">
+          	<img src = "https://animalxop.com/cdn/shop/articles/60968798-7049-4300-8625-429cc671e9e7.jpg?v=1701897652" />
+          </div>
+              
+          <div id = "gran_danes" style = "display:none;" class = "mt-2">
+          	<img src = "https://animalxop.com/cdn/shop/articles/86074112-9fc5-462a-93bd-e67817d75e81.jpg?v=1701897644" />
+          </div>
+          <div id = "greyjaund" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/e/ef/GraceTheGreyhound.jpg" />
+          </div>
+          <div id = "havan" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.aniforte.co.uk/cdn/shop/articles/havanese-breed-portrait-716238.jpg" />
+          </div>
+          <div id = "irish_sett" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Can_Setter_dog_GFDL.jpg/1200px-Can_Setter_dog_GFDL.jpg" />
+          </div>
+          <div id = "irish_watt" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/8/84/Ierse_Water_Spaniel.jpg" />
+          </div>
+          <div id = "greyjaund_it" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Italian_Greyhound_standing_gray_%28cropped%29.jpg/960px-Italian_Greyhound_standing_gray_%28cropped%29.jpg" />
+          </div>
+          
+          <div id = "jack_russ_terr" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Jack_Russell_Terrier_1.jpg/330px-Jack_Russell_Terrier_1.jpg" />
+          </div>
+          <div id = "keeshond" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Keeshond_Majic_standing_cropped.jpg/960px-Keeshond_Majic_standing_cropped.jpg" />
+          </div>
+          
+          <div id = "rey_charls" style = "display:none;" class = "mt-2">
+          	<img src = "https://cdn.wamiz.fr/cdn-cgi/image/format=auto,quality=80,width=532,height=532,fit=cover/animal/breed/dog/adult/6703fb90a8bf7338776182.jpg" />
+          </div>
+          <div id = "labrador_retriver" style = "display:none;" class = "mt-2">
+          	<img src = "https://headsupfortails.com/cdn/shop/articles/Labrador_Retriever_Dog_Breed_dea12ce1-775e-464f-877a-08f2001ddd75.jpg?v=1741666427" />
+          </div>
+          <div id = "leikland_terrier" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/5/58/01_Lakeland_Terrier.jpg" />
+          </div>
+          
+          <div id = "lasa_apso" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Lhasaapso.jpg/960px-Lhasaapso.jpg" />
+          </div>
+          <div id = "maltes" style = "display:none;" class = "mt-2">
+          	<img src = "https://media.istockphoto.com/id/153520182/es/foto/perro-malt%C3%A9s.jpg?s=612x612&w=0&k=20&c=bfdD3mUR_YfqUCX0rS_hVTVflh8bVeJzFzA6QSPwsqo=" />
+          </div>
+          <div id = "mestin_napolitano" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Mastino_Napoletano_R%C3%BCde_clp.JPG/1200px-Mastino_Napoletano_R%C3%BCde_clp.JPG" />
+          </div>
+          <div id = "mestizo" style = "display:none;" class = "mt-2">
+          	
+          </div>
+          <div id = "miniatur_bul_terrier" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.purina.es/sites/default/files/styles/ttt_image_510/public/2024-02/sitesdefaultfilesstylessquare_medium_440x440public2022-07Bull20Terrier20Miniature2.jpg?itok=eJ33OuME" />
+          </div>
+          <div id = "miniatur_esnauzer" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.worldlifeexpectancy.com//images/a/d/d/b/miniature_schnauzer/miniature_schnauzer_1.webp" />
+          </div>
+          
+          <div id = "morkie" style = "display:none;" class = "mt-2">
+          	<img src = "https://consumer-cms.petfinder.com/sites/default/files/images/content/Morkie%204.jpg" />
+          </div>
+          <div id = "newfaundlan" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Newfoundland_dog_Smoky.jpg/250px-Newfoundland_dog_Smoky.jpg" />
+          </div>
+          <div id = "norfol_terr" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/b/be/Norfolk_terrier_CAC.jpg" />
+          </div>
+          <div id = "noruego_elk" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/3/32/Elkhound2020_%28cropped%29.jpg" />
+          </div>
+          
+          <div id = "papilon" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/4/42/Papillon_throw_it_already.jpg" />
+          </div>
+          <div id = "parson_russ_terr" style = "display:none;" class = "mt-2">
+          	<img src = "https://mivet.com/wp-content/uploads/fly-images/1366/shutterstock_277964216-740x500-c.jpg" />
+          </div>
+          <div id = "pekin" style = "display:none;" class = "mt-2">
+          	<img src = "https://static.wikia.nocookie.net/razasdeperros4226/images/9/9b/Pequines.jpg/revision/latest?cb=20170324113853&path-prefix=es" />
+          </div>
+          <div id = "pembroke_welsh" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Welsh_Pembroke_Corgi.jpg/1200px-Welsh_Pembroke_Corgi.jpg" />
+          </div>
+          <div id = "pitbull_terr" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/000_American_Pit_Bull_Terrier.jpg/960px-000_American_Pit_Bull_Terrier.jpg" />
+          </div>
+          
+          <div id = "plotjaund" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Bossplotthound.JPG/960px-Bossplotthound.JPG" />
+          </div>
+          <div id = "pudul" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Poodle%2C_cropped.JPG/1200px-Poodle%2C_cropped.JPG" />
+          </div>
+          <div id = "pomerania" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Pomeranian_orange-sable_Coco.jpg/1200px-Pomeranian_orange-sable_Coco.jpg" />
+          </div>
+          <div id = "puli" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/b/b3/Puli_600.jpg" />
+          </div>
+          <div id = "pug" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/My_pug.jpg/800px-My_pug.jpg" />
+          </div>
+          <div id = "rotwailer" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.purina.es/sites/default/files/styles/ttt_image_510/public/2024-02/sitesdefaultfilesstylessquare_medium_440x440public2022-08Rottweiler1.jpg?itok=qKmtLBqZ" />
+          </div>
+              
+          <div id = "san_bernar" style = "display:none;" class = "mt-2">
+          	<img src = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiIBu-xRSNvlXBI-hHaWiO-6hsOGxzq_vVvBksQH5_umGH3DJMRqm0kKuRtSKO4tmbsfoc3_oTLUT_RQaOGN16cOjThv9QZJ_MiCcVUopH-e602iIaNfbiFy1nPcrHasoNaGclelqVvoIm7/s1600/san-bernardo-blanco-marron.jpg" />
+          </div>
+          <div id = "saluki" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Cream_saluki_on_grass.jpg/960px-Cream_saluki_on_grass.jpg" />
+          </div>
+          <div id = "samoyedo" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/f/f6/11.10.2015_Samoyed_%28cropped%29.jpg" />
+          </div>
+          <div id = "schiparke" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Schipperke_in_Riga.JPG/1200px-Schipperke_in_Riga.JPG" />
+          </div>
+              
+          <div id = "escoces_t" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.purina.es/sites/default/files/styles/ttt_image_510/public/2020-12/Scottish%20Terrier1.jpg?itok=efJ5skp4" />
+          </div>
+          <div id = "sealyham" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.purina.es/sites/default/files/styles/ttt_image_510/public/2021-01/Sealyham%20Terrier2.jpg?itok=OahIVh92" />
+          </div>
+          <div id = "shiba_inu" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.akc.org/wp-content/uploads/2017/11/Shiba-Inu-standing-in-profile-outdoors.jpg" />
+          </div>
+          <div id = "shih_tzu" style = "display:none;" class = "mt-2">
+          	<img src = "https://content.elmueble.com/medio/2025/03/18/shih-tzu_63a0401b_250318172700_900x900.webp" />
+          </div>
+          
+          <div id = "esnauzer" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.dogpackapp.com/blog/wp-content/uploads/2025/04/miniature-schnauzer-dog-breed-full-body.webp" />
+          </div>
+          <div id = "pastor_shetland" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/a/a2/Shetland_Sheepdog_600.jpg" />
+          </div>
+          <div id = "sedoso_t" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/a/af/Australian_Silky_Terrier_Alana_Of_Silky%27s_Dream.jpg" />
+          </div>
+          <div id = "staffordshire" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.bonza.dog/wp-content/uploads/Staffordshire-Bull-Terrier-Problems-Comprehensive-Guide-to-Common-Issues.webp" />
+          </div>
+          <div id = "susexo" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/c/c9/Sussex_spaniel_t43.jpg" />
+          </div>
+              
+
+          <div id = "tibetano_mast" style = "display:none;" class = "mt-2">
+          	<img src = "https://www.thesprucepets.com/thmb/ltpjpqJIkTh6z2G5wp2tF-FWEhs=/1566x0/filters:no_upscale():strip_icc()/GettyImages-1214648223-a185de9c88984ca69f1ac720bdea6efe.jpg" />
+          </div>
+          <div id = "tibetano_span" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/3/38/Tibetansk_spaniel.jpg" />
+          </div>
+          
+          <div id = "vizsla" style = "display:none;" class = "mt-2">
+          	<img src = "https://cdn.shopify.com/s/files/1/0650/9504/1173/files/1628025004_555_Conoce-las-caracteristicas-mas-resaltantes-del-energico-Vizsla-o-Braco.jpg?v=1709718399" />
+          </div>
+          <div id = "weimaran" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Weimaraner_in_Tallinn_3.JPG/960px-Weimaraner_in_Tallinn_3.JPG" />
+          </div>
+          
+          <div id = "wes_jaig_wait_ter" style = "display:none;" class = "mt-2">
+          	<img src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJgpvYcVPvhqnSmzO9at6FQTqZ3ySe0J3LjA&s" />
+          </div>
+          
+          <div id = "whifet" style = "display:none;" class = "mt-2">
+          	<img src = "https://upload.wikimedia.org/wikipedia/commons/9/92/Whippet_stacked.jpg" />
+          </div>
+          <div id = "wairjer_point_grifo" style = "display:none;" class = "mt-2">
+          	<img src = "https://projectupland.com/wp-content/uploads/2020/06/The-Wirehaired-Pointing-Griffon-Controversy-in-North-America-3.jpg" />
+          </div>
+          <div id = "york_terr" style = "display:none;" class = "mt-2">
+          	<img src = "https://cdn.wamiz.fr/cdn-cgi/image/format=auto,quality=80,width=532,height=532,fit=cover/animal/breed/dog/adult/66fbf1de94b1b803960670.jpg" />
+          </div>
+          <div id = "otra" style = "display:none;" class = "mt-2">
+
+          </div>
 
           <div class="mb-4">
             <label class="block text-gray-700 font-medium mb-2">Sexo *</label>
@@ -225,7 +537,8 @@
               </label>
             </div>
           </div>
-          
+
+          <img src = 'https://www.gob.mx/cms/uploads/image/file/508168/3_Imagen_talla_perros.JPG' alt = 'diagrama' width = 100% attributionsrc="https://a.example/register-source" />
           <div class="mb-4">
             <label for="tamaño" class="block text-gray-700 font-medium mb-2">Tamaño *</label>
             <select id="tamaño" name="tamaño" class="w-full p-2 border border-gray-300 rounded-md" required>
@@ -353,6 +666,20 @@
                 <option value="negro">Negro</option>
                 <option value="blanco">Blanco</option>
               </select>
+            </div>
+
+            <div id = "teniendo_placa" style = "display:none;" class = "mt-2">
+            	<label for="teniendo_placa_select" class="block text-gray-700 font-medium mb-2"> ¿El collar tiene alguna placa?: </label>
+            	    <select id="teniendo_placa_select" name = "teniendo_placa" class="w-full p-2 border border-gray-300 rounded-md">
+            	    	<option value="" disable selected>Selecciona una opcion</option>
+            	    	<option value="si">Sí</option>
+            	    	<option value="no">No</option>
+            	    </select>
+            </div>
+            
+            <div id = "descripcion_de_placa" style = "display:none;" class = "mt-2">
+            	<label for = "descripcion_de_placa" class="block text-gray-700 font-medium mb-2"> Describa brevemente la placa </label>
+            	<input type = "text" id="descripcion_de_placa" name = "descripcion_de_placa" maxlength="25" class="w-full p-2 border border-gray-300 rounded-md">
             </div>
             
             <div id="chip_ruac" style="display:none;" class="mt-2">
