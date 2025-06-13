@@ -2,12 +2,22 @@
       var identificador = document.getElementById("identificador").value;
       var color_collar = document.getElementById("color_collar");
       var chip_ruac = document.getElementById("chip_ruac");
+      var placa = document.getElementById("teniendo_placa");
+      var respondido = document.getElementById("teniendo_placa_select").value;
+      var descripcion_placa = document.getElementById("descripcion_de_placa");
       
       color_collar.style.display = "none";
       chip_ruac.style.display = "none";
+      placa.style.display = "none";
+      descripcion_placa.style.display = "none";
       
       if (identificador == "collar") {
         color_collar.style.display = "block";
+	placa.style.display = "block";
+        if (respondido == "si"){
+                console.log("Entre al if");
+                descripcion_placa.style.display = "block";
+            }
       } else if (identificador == "chip" || identificador == "ruac") {
         chip_ruac.style.display = "block";
       }
