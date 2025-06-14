@@ -1,3 +1,4 @@
+# #-------------------------CONFIG-MAEL-------------------------
 # from pathlib import Path
 # import os
 
@@ -147,9 +148,7 @@
 #     ],
 # }
 
-
-
-
+#-------------------------CONFIG-RENDER-------------------------
 from pathlib import Path
 import os
 import dj_database_url
@@ -285,3 +284,8 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_CREDENTIALS = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+#-------------------------CONFIG-JAVIER-------------------------

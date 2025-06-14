@@ -2,6 +2,42 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+<style>
+    #map { height: 400px; border-radius: 8px; border: 1px solid #ddd; }
+    .leaflet-marker-icon { cursor: grab; }
+    .leaflet-marker-icon:active { cursor: grabbing; }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Patitas a casa - Reportar Avistamiento Anónimo</title>
@@ -9,6 +45,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="{% static 'js/sepomex-autocomplete.js' %}"></script>
 </head>
 <body class="bg-gray-100 font-roboto">
   {% if messages %}
@@ -27,67 +64,149 @@
       
       <form method="post" enctype="multipart/form-data" id="avistamientoForm">
         {% csrf_token %}
-          <div class="mb-4">
-            <label for="entidad_federativa" class="block text-gray-700 font-medium mb-2">
-              Entidad Federativa (Estado) *
-            </label>
-            <select id="entidad_federativa" name="entidad_federativa" class="w-full p-2 border border-gray-300 rounded-md" required>
-              <option value="" disabled selected>Selecciona un estado</option>
-              <option value="CDMX">Ciudad de México</option>
-            </select>
-          </div>
 
-          <div class="mb-4">
-            <label for="alcaldia" class="block text-gray-700 font-medium mb-2">
-              Alcaldía/Municipio *
-            </label>
-            <select id="municipio_alcaldia" name="municipio_alcaldia" class="w-full p-2 border border-gray-300 rounded-md" onchange = "loadMunic()" required>
-              <option value="" disabled selected>Selecciona una alcaldía</option>
-              <option value="Álvaro Obregón">Álvaro Obregón</option>
-              <option value="Azcapotzalco">Azcapotzalco</option>
-              <option value="Benito Juárez">Benito Juárez</option>
-              <option value="Coyoacan">Coyoacán</option>
-              <option value="Cuajimalpa de Morelos">Cuajimalpa de Morelos</option>
-              <option value="Cuauhtemoc">Cuauhtémoc</option>
-              <option value="Gustavo A. Madero">Gustavo A. Madero</option>
-              <option value="Iztacalco">Iztacalco</option>
-              <option value="Iztapalapa">Iztapalapa</option>
-              <option value="La Magdalena Contreras">La Magdalena Contreras</option>
-              <option value="Milpa Alta">Milpa Alta</option>
-              <option value="Miguel Hidalgo">Miguel Hidalgo</option>
-              <option value="Tláhuac">Tláhuac</option>
-              <option value="Tlalpan">Tlalpan</option>
-              <option value="Venustiano Carranza">Venustiano Carranza</option>
-              <option value="Xochimilco">Xochimilco</option>
-            </select>
-          </div>
 
-          <div class="mb-4">
-            <label for="codigo_postal" class="block text-gray-700 font-medium mb-2">
-              Código Postal *
-            </label>
-            <input type="text" id="codigo_postal" name="codigo_postal" maxlength="5" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Ejemplo: 12345" required/>
-          </div>
-          
-          <div class="mb-4">
-            <label for="colonia" class="block text-gray-700 font-medium mb-2">
-              Colonia *
-            </label>
-            <select id="colonia" name="colonia" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Nombre de la colonia" required></select>
-          </div>
 
-          <div class="mb-4">
-            <label for="calle" class="block text-gray-700 font-medium mb-2">
-              Calle *
-            </label>
-            <input type="text" id="calle" name="calle" maxlength="80" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Nombre de la calle" required/>
-          </div>
 
-          <div class="mb-4">
-            <label for="numero_exterior" class="block text-gray-700 font-medium mb-2">
-              Número Exterior *
-            </label>
-            <input type="number" id="numero_exterior" name="numero_exterior" maxlength="5" class="w-full p-2 border border-gray-300 rounded-md" placeholder="Número exterior" required/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="mb-6">
+    <label class="block text-gray-700 font-medium mb-2">
+        Selecciona la ubicación en el mapa *
+    </label>
+    <div id="map"></div>
+    <p class="text-sm text-gray-500 mt-1">Haz clic en el mapa para marcar la ubicación exacta</p>
+</div>
+
+<!-- Campos ocultos para coordenadas -->
+<input type="hidden" id="latitud" name="latitud">
+<input type="hidden" id="longitud" name="longitud">
+
+<!-- Agrega al final antes de cerrar el body -->
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<script src="{% static 'js/leaflet-autocomplete.js' %}"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <!-- Sección del formulario - Una sola columna -->
+          <div class="grid grid-cols-1 gap-4 mb-6">
+              <!-- Código Postal -->
+              <div class="mb-4">
+                  <label for="codigo_postal" class="block text-gray-700 font-medium mb-2">
+                      Código Postal *
+                  </label>
+                  <input type="text" id="codigo_postal" name="codigo_postal" maxlength="5" 
+                         class="w-full p-2 border border-gray-300 rounded-md" 
+                         placeholder="Ejemplo: 11280" required
+                         pattern="\d{5}" title="Debe ser un código postal válido de 5 dígitos"
+                         autocomplete="postal-code"/>
+                  <div id="cp-loading" class="hidden mt-2 text-sm text-blue-600">
+                      <i class="fas fa-spinner fa-spin mr-2"></i>Buscando datos del código postal...
+                  </div>
+              </div>
+
+              <!-- Ciudad -->
+              <div class="mb-4">
+                  <label for="ciudad" class="block text-gray-700 font-medium mb-2">
+                      Ciudad *
+                  </label>
+                  <input type="text" id="ciudad" name="ciudad" 
+                         class="w-full p-2 border border-gray-300 rounded-md bg-gray-50" 
+                         readonly required/>
+              </div>
+
+              <!-- Alcaldía -->
+              <div class="mb-4">
+                  <label for="alcaldia" class="block text-gray-700 font-medium mb-2">
+                      Alcaldía/Municipio *
+                  </label>
+                  <input type="text" id="alcaldia" name="alcaldia" 
+                         class="w-full p-2 border border-gray-300 rounded-md bg-gray-50" 
+                         readonly required/>
+              </div>
+
+              <!-- Colonia -->
+              <div class="mb-4">
+                  <label for="colonia" class="block text-gray-700 font-medium mb-2">
+                      Colonia *
+                  </label>
+                  <select id="colonia" name="colonia" 
+                          class="w-full p-2 border border-gray-300 rounded-md bg-gray-50" required
+                          disabled>
+                      <option value="">Primero ingresa tu código postal</option>
+                  </select>
+              </div>
+
+              <!-- Calle -->
+              <div class="mb-4">
+                  <label for="calle" class="block text-gray-700 font-medium mb-2">
+                      Calle *
+                  </label>
+                  <input type="text" id="calle" name="calle" maxlength="80" 
+                         class="w-full p-2 border border-gray-300 rounded-md" 
+                         placeholder="Nombre de la calle" required/>
+              </div>
+
+              <!-- Número Exterior -->
+              <div class="mb-4">
+                  <label for="numero_exterior" class="block text-gray-700 font-medium mb-2">
+                      Número Exterior *
+                  </label>
+                  <input type="text" id="numero_exterior" name="numero_exterior" maxlength="10" 
+                         class="w-full p-2 border border-gray-300 rounded-md" 
+                         placeholder="Número o manzana" required/>
+              </div>
           </div>
           <div class="mb-4">
             <label for="fecha_hora_avistamiento" class="block text-gray-700 font-medium mb-2">
