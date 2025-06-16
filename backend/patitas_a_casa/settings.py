@@ -136,7 +136,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
@@ -203,18 +202,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'patitas_a_casa.wsgi.application'
 
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default='postgresql://isma:OSUgkccoT2v5RwGSB1grbbrUT706rdcv@dpg-d0uautqdbo4c73aq86pg-a.oregon-postgres.render.com/patitasacasa',
-#         conn_max_age=600,
-#         ssl_require=True
-#     )
-# }
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
+        default='postgresql://isma:OSUgkccoT2v5RwGSB1grbbrUT706rdcv@dpg-d0uautqdbo4c73aq86pg-a.oregon-postgres.render.com/patitasacasa',
         conn_max_age=600,
-        sslmode='require'
+        ssl_require=True
     )
 }
 
