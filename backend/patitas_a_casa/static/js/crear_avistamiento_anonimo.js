@@ -609,14 +609,10 @@
     			break;
     	}
     }
-    
-    // Manejo del envío del formulario
     document.getElementById('avistamientoForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const form = this;
         const formData = new FormData(form);
-        
-        // Validación adicional del frontend
         if (!form.checkValidity()) {
             alert("Por favor completa todos los campos requeridos marcados con *");
             return;
@@ -704,3 +700,226 @@
 	while(select.length > 0)
 	select.remove(0);
     }
+
+document.addEventListener('DOMContentLoaded', function() {
+    let allShelters = [];
+    let visibleMarkers = []; 
+    const ZOOM_THRESHOLD = 13;
+    const actionCards = document.querySelectorAll('.action-card');
+    const followups = document.querySelectorAll('.action-followup');
+    let map;
+    
+    let otherShelterRadio, otherShelterInput;
+
+    // Crear icono personalizado
+    const defaultIcon = L.icon({
+    	iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-violet.png',
+    	iconSize: [25, 41],
+    	iconAnchor: [12, 41],
+    	popupAnchor: [1, -34]
+	});
+
+    actionCards.forEach(card => {
+        card.addEventListener('click', function() {
+            actionCards.forEach(c => c.classList.remove('selected'));
+            followups.forEach(f => f.classList.remove('active'));
+            this.classList.add('selected');
+            const action = this.dataset.action;
+            
+            if (action !== 'nothing') {
+                document.getElementById(`${action}-followup`).classList.add('active');
+            }
+            
+            if (action === 'help') {
+                const otherCheckbox = document.querySelector('input[name="help_type[]"][value="other"]');
+                const otherContainer = document.getElementById('other-help-container');
+                if (otherCheckbox) {
+                    otherCheckbox.addEventListener('change', function() {
+                        otherContainer.style.display = this.checked ? 'block' : 'none';
+                    });
+                }
+            }
+            
+            if (action === 'shelter') {
+                otherShelterRadio = document.querySelector('input[name="shelter_type"][value="other"]');
+                otherShelterInput = document.querySelector('input[name="other_shelter"]');
+                
+                if (otherShelterRadio) {
+                    otherShelterRadio.addEventListener('change', function() {
+                        if (this.checked) {
+                            clearShelterSelection();
+                        }
+                        if (otherShelterInput) {
+                            otherShelterInput.style.display = this.checked ? 'block' : 'none';
+                        }
+                    });
+                }
+                
+                initShelterMap();
+            }
+        });
+    });
+
+    function clearShelterSelection() {
+        document.querySelectorAll('input[name="selected_shelter"]').forEach(radio => {
+            radio.checked = false;
+        });
+        document.querySelectorAll('.shelter-option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        resetMarkersOpacity();
+    }
+
+    function resetMarkersOpacity() {
+        visibleMarkers.forEach(marker => {
+            const markerElement = marker.getElement();
+            if (markerElement) {
+                markerElement.classList.add('hidden-marker');
+                markerElement.classList.remove('faded-marker', 'selected-marker');
+            }
+        });
+    }
+
+    async function initShelterMap() {
+        const cdmxCenter = [19.4326, -99.1332];
+        map = L.map('shelter-map').setView(cdmxCenter, 11);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        
+        try {
+            const response = await fetch("/static/data/albergues.json");
+            if (!response.ok) throw new Error("Error al cargar albergues");
+            allShelters = await response.json();
+            displayShelters(map);
+            
+            document.getElementById('shelter-search').addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase();
+                const filtered = term ? allShelters.filter(s => 
+                    s.name.toLowerCase().includes(term)) : allShelters;
+                displayShelters(map, filtered);
+            });
+            
+            map.on('zoomend', updateMarkersVisibility);
+        } catch (error) {
+            console.error("Error:", error);
+            document.getElementById('shelter-options').innerHTML = `
+                <div class="p-3 bg-red-100 text-red-700 rounded text-sm">
+                    Error al cargar albergues: ${error.message}
+                </div>`;
+        }
+    }
+
+    function updateMarkersVisibility() {
+        const shouldShow = map.getZoom() >= ZOOM_THRESHOLD;
+        
+        visibleMarkers.forEach(marker => {
+            const markerElement = marker.getElement();
+            if (markerElement) {
+                if (shouldShow) {
+                    markerElement.classList.remove('hidden-marker');
+                    if (!markerElement.classList.contains('selected-marker')) {
+                        markerElement.classList.add('faded-marker');
+                    }
+                } else {
+                    markerElement.classList.add('hidden-marker');
+                    markerElement.classList.remove('faded-marker', 'selected-marker');
+                }
+            }
+        });
+    }
+
+    function displayShelters(map, shelters = allShelters) {
+        const optionsContainer = document.getElementById('shelter-options');
+        optionsContainer.innerHTML = '';
+        
+        visibleMarkers.forEach(marker => map.removeLayer(marker));
+        visibleMarkers = [];
+        
+        shelters.forEach((shelter, idx) => {
+            const marker = L.marker(shelter.coords, {
+                icon: defaultIcon
+            }).addTo(map);
+            
+            marker.bindPopup(`
+                <div class="leaflet-popup-content">
+                    <strong>${shelter.name}</strong>
+                    ${shelter.address ? `<br><small>${shelter.address}</small>` : ''}
+                </div>
+            `);
+            
+            const markerElement = marker.getElement();
+            if (markerElement) {
+                markerElement.classList.add('hidden-marker');
+            }
+            
+            visibleMarkers.push(marker);
+            
+            const option = document.createElement('div');
+            option.className = 'shelter-option visible';
+            option.id = `shelter-option-${idx}`;
+            option.innerHTML = `
+                <input type="radio" name="selected_shelter" value="${shelter.name}" 
+                       id="shelter-${idx}" class="mr-2">
+                <label for="shelter-${idx}" class="cursor-pointer">
+                    <strong>${shelter.name}</strong>
+                    ${shelter.address ? `<br><small class="text-gray-600">${shelter.address}</small>` : ''}
+                </label>
+            `;
+            
+            const radioInput = option.querySelector('input');
+            
+            radioInput.addEventListener('change', () => {
+                handleShelterSelection(map, marker, option, shelters, idx);
+            });
+            
+            marker.on('click', () => {
+                radioInput.checked = true;
+                handleShelterSelection(map, marker, option, shelters, idx);
+            });
+            
+            optionsContainer.appendChild(option);
+        });
+    }
+    
+    function handleShelterSelection(map, marker, option, shelters, idx) {
+        if (otherShelterRadio) {
+            otherShelterRadio.checked = false;
+            if (otherShelterInput) {
+                otherShelterInput.style.display = 'none';
+            }
+        }
+        
+        const shelter = shelters[idx];
+        map.setView(shelter.coords, Math.max(map.getZoom(), 15));
+        
+        visibleMarkers.forEach(m => {
+            const markerElement = m.getElement();
+            if (markerElement) {
+                if (m === marker) {
+                    markerElement.classList.remove('hidden-marker', 'faded-marker');
+                    markerElement.classList.add('selected-marker');
+                    m.openPopup();
+                } else {
+                    markerElement.classList.remove('selected-marker');
+                    if (map.getZoom() >= ZOOM_THRESHOLD) {
+                        markerElement.classList.add('faded-marker');
+                    } else {
+                        markerElement.classList.add('hidden-marker');
+                    }
+                }
+            }
+        });
+        
+        document.querySelectorAll('.shelter-option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        option.classList.add('selected');
+        
+        option.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest'
+        });
+    }
+});
