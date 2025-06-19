@@ -40,7 +40,7 @@
         showSlides2(eslaidIndex2)
     }
     function currentSlide2(n){
-        showSlides2(eslaidIndex2 = n;)
+        showSlides2(eslaidIndex2 = n)
     }
     function showSlides2(n){
         let i;
