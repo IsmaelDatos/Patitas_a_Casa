@@ -1,50 +1,60 @@
   	/*Aqui va lo del carrusel*/
+    console.log("declaro slideIndex");
     let slideIndex = 1;
     showSlides(slideIndex)
-
+    console.log("llamo a showSlides");
     function plusSlides(n){
+        console.log("entro a plusSlides");
         showSlides(slideIndex += n)
     }
     function currentSlide(n){
+	console.log("entro a currentSlide");
         showSlides(slideIndex = n)
     }
     function showSlides(n){
+	console.log("entro a showSlides");
         let i;
+	console.log("cambio slides");
         let slides = document.querySelectorAll(".mySlides");
         //let quadrates = document.querySelectorAll(".quadrate"); 
+	console.log("reviso ifs");
         if(n > slides.length) slideIndex = 1
         if(n < 1) slideIndex = slides.length
+	console.log("me meto a un for");
         for(i = 0; i < slides.length; i++){
             slides[i].style.display = "none"
     	}
     //for(i = 0; i < quadrates.length;i++){
     //    quadrates[i].className = quadrates[i].className.replace("active","")
     //}
+	console.log("despliego slides");
         slides[slideIndex-1].style.display = "block";
     //quadrates[slideIndex-1].className += " active";
     }
-    
-    let slideIndex2 = 1;
-    showSlides2(slideIndex2)
+
+    console.log("creo ");
+    let eslaidIndex2 = 1;
+    showSlides2(eslaidIndex2)
     function plusSlides2(n){
-        showSlides2(slideIndex2 += n)
+	eslaidIndex2 += n;
+        showSlides2(eslaidIndex2)
     }
     function currentSlide2(n){
-        showSlides2(slideIndex2 = n)
+        showSlides2(eslaidIndex2 = n;)
     }
     function showSlides2(n){
         let i;
         let slides2 = document.querySelectorAll(".mySlides2");
         //let quadrates = document.querySelectorAll(".quadrate"); 
-        if(n > slides2.length) slideIndex2 = 1
-        if(n < 1) slideIndex2 = slides2.length
+        if(n > slides2.length) eslaidIndex2 = 1
+        if(n < 1) eslaidIndex2 = slides2.length
         for(i = 0; i < slides2.length; i++){
             slides2[i].style.display = "none"
     	}
     //for(i = 0; i < quadrates.length;i++){
     //    quadrates[i].className = quadrates[i].className.replace("active","")
     //}
-        slides2[slideIndex2-1].style.display = "block";
+        slides2[eslaidIndex2-1].style.display = "block";
     //quadrates[slideIndex-1].className += " active";
     }
     function prueba(cosa){
