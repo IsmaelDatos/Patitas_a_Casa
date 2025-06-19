@@ -1,0 +1,273 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportar Perro Perdido - Patitas a Casa</title>
+    <link rel="stylesheet" href="/static/css/registro_perro_perdido.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="perdido-container">
+        <h1 class="perdido-title">Reportar Perro Perdido</h1>
+        
+        <div class="progress-bar">
+            <div class="progress-step">
+                <div class="step-bubble active" id="step-1">1</div>
+                <span class="step-label active">Información Básica</span>
+            </div>
+            <div class="progress-step">
+                <div class="step-bubble" id="step-2">2</div>
+                <span class="step-label">Descripción</span>
+            </div>
+            <div class="progress-step">
+                <div class="step-bubble" id="step-3">3</div>
+                <span class="step-label">Identificación</span>
+            </div>
+            <div class="progress-step">
+                <div class="step-bubble" id="step-4">4</div>
+                <span class="step-label">Ubicación</span>
+            </div>
+            <div class="progress-step">
+                <div class="step-bubble" id="step-5">5</div>
+                <span class="step-label">Contacto</span>
+            </div>
+        </div>
+        
+        <form method="post" id="lostDogForm" class="perdido-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Paso 1: Información Básica -->
+            <div class="form-step active" id="step1">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label required-field" for="dogName">Nombre del perro</label>
+                        <input class="form-input" type="text" id="dogName" name="dogName" required placeholder="Ej: Max, Luna, Toby">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required-field" for="lastSeenDate">Fecha en que lo vio por última vez</label>
+                        <input class="form-input" type="date" id="lastSeenDate" name="lastSeenDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required-field" for="lastSeenTime">Hora aproximada</label>
+                        <input class="form-input" type="time" id="lastSeenTime" name="lastSeenTime" required>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label class="form-label required-field">Fotos del perro</label>
+                        <div class="photo-upload" id="photoUpload">
+                            <i>📷</i>
+                            <p>Haz clic para subir fotos (mínimo 1, máximo 3)</p>
+                            <p class="hint-text">Puedes aparecer en la foto también, esto ayuda a generar confianza</p>
+                            <input type="file" id="dogPhotos" name="dogPhotos" accept="image/*" multiple style="display: none;">
+                        </div>
+                        <div class="photo-preview" id="photoPreview"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Paso 2: Descripción del Perro -->
+            <div class="form-step" id="step2">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label required-field" for="dogBreed">Raza</label>
+                        <input class="form-input" type="text" id="dogBreed" name="dogBreed" required placeholder="Ej: Labrador, Mestizo, Chihuahua">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required-field">Sexo</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="dogGender" value="male" required> Macho
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="dogGender" value="female"> Hembra
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="dogGender" value="unknown"> No sé
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required-field" for="dogSize">Tamaño</label>
+                        <select class="form-input" id="dogSize" name="dogSize" required>
+                            <option value="">Selecciona...</option>
+                            <option value="small">Pequeño (menos de 10 kg)</option>
+                            <option value="medium">Mediano (10-25 kg)</option>
+                            <option value="large">Grande (25-45 kg)</option>
+                            <option value="xlarge">Muy grande (más de 45 kg)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required-field" for="dogAge">Edad aproximada</label>
+                        <input class="form-input" type="text" id="dogAge" name="dogAge" required placeholder="Ej: 3 años, 6 meses">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required-field" for="primaryColor">Color principal</label>
+                        <input class="form-input" type="text" id="primaryColor" name="primaryColor" required placeholder="Ej: Negro, Café, Blanco, Gris">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="furType">Tipo de pelaje</label>
+                        <select class="form-input" id="furType" name="furType">
+                            <option value="">Selecciona...</option>
+                            <option value="short">Corto</option>
+                            <option value="medium">Mediano</option>
+                            <option value="long">Largo</option>
+                            <option value="curly">Rizado</option>
+                            <option value="wire">Alambre</option>
+                            <option value="hairless">Sin pelo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label class="form-label required-field" for="dogDescription">Descripción detallada</label>
+                        <textarea class="form-textarea" id="dogDescription" name="dogDescription" rows="4" required placeholder="Describe características únicas como marcas, cicatrices, comportamiento, etc."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Paso 3: Identificación y Salud -->
+            <div class="form-step" id="step3">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">¿Tiene algún identificador?</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="identifiers" value="collar"> Collar
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="identifiers" value="tag"> Placa de identificación
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="identifiers" value="microchip"> Microchip
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="identifiers" value="tattoo"> Tatuaje
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="identifiers" value="none"> Ninguno
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width" id="identifierDetailsGroup" style="display: none;">
+                        <label class="form-label" for="identifierDetails">Detalles del identificador</label>
+                        <textarea class="form-textarea" id="identifierDetails" name="identifierDetails" rows="2" placeholder="Número de chip, color del collar, texto en la placa, etc."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Vacunas al día</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="vaccinated" value="yes"> Sí
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="vaccinated" value="no"> No
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="vaccinated" value="unknown"> No sé
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label class="form-label" for="vaccineDetails">Detalles de vacunas (opcional)</label>
+                        <textarea class="form-textarea" id="vaccineDetails" name="vaccineDetails" rows="2" placeholder="¿Qué vacunas tiene? ¿Cuándo fue la última?"></textarea>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label class="form-label" for="healthDetails">Problemas de salud o necesidades especiales</label>
+                        <textarea class="form-textarea" id="healthDetails" name="healthDetails" rows="3" placeholder="Ej: Necesita medicamentos, es diabético, tiene alergias, etc."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Paso 4: Ubicación -->
+            <div class="form-step" id="step4">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label class="form-label required-field">Indica la ubicación donde lo viste por última vez</label>
+                        <div id="map"></div>
+                        <p class="hint-text">Mueve el mapa para ajustar la ubicación exacta. Puedes hacer zoom para mayor precisión.</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required-field" for="postalCode">Código Postal</label>
+                        <input class="form-input" type="text" id="postalCode" name="postalCode" pattern="\d{5}" required placeholder="5 dígitos">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required-field" for="state">Estado</label>
+                        <input class="form-input" type="text" id="state" name="state" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required-field" for="city">Ciudad/Municipio</label>
+                        <input class="form-input" type="text" id="city" name="city" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required-field" for="neighborhood">Colonia</label>
+                        <input class="form-input" type="text" id="neighborhood" name="neighborhood" required>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label class="form-label" for="addressDetails">Detalles de la ubicación (opcional)</label>
+                        <textarea class="form-textarea" id="addressDetails" name="addressDetails" rows="2" placeholder="Ej: Cerca del parque central, frente a la tienda de abarrotes, etc."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Paso 5: Contacto -->
+            <div class="form-step" id="step5">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label required-field" for="contactName">Nombre de contacto</label>
+                        <input class="form-input" type="text" id="contactName" name="contactName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required-field" for="contactPhone">Teléfono de contacto</label>
+                        <input class="form-input" type="tel" id="contactPhone" name="contactPhone" required placeholder="10 dígitos">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="contactEmail">Correo electrónico (opcional)</label>
+                        <input class="form-input" type="email" id="contactEmail" name="contactEmail" placeholder="Para recibir actualizaciones">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="additionalContact">Otro método de contacto (opcional)</label>
+                        <input class="form-input" type="text" id="additionalContact" name="additionalContact" placeholder="Ej: WhatsApp, Facebook, Instagram">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="reward">¿Ofreces recompensa? (opcional)</label>
+                        <input class="form-input" type="text" id="reward" name="reward" placeholder="Ej: $500, información confidencial">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-navigation">
+                <button type="button" class="btn btn-secondary" id="prevBtn" disabled>Anterior</button>
+                <button type="button" class="btn btn-primary" id="nextBtn">Siguiente</button>
+                <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">Enviar Reporte</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="/static/js/registro_perro_perdido.js"></script>
+</body>
+</html>

@@ -25,4 +25,5 @@ urlpatterns = [
     path('usuarios/', include('patitas_a_casa.apps.usuarios.urls')),
     path('avistamiento/', include('patitas_a_casa.apps.perros.Avistamiento_Perros.urls', namespace='avistamiento_perros')),
     path('adopcion/', include('patitas_a_casa.apps.adopciones.urls')),
+    path('perros/', include('patitas_a_casa.apps.perros.Registro_Perro.urls', namespace='registro_perro')), #expoescom
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Iconos personalizados
   function createIcon(svgUrl) {
-    // SVG que envuelve el icono blanco dentro de un círculo morado
      const svgHtml = `
      <svg width="38" height="38" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
        <circle cx="19" cy="19" r="18" fill="#5A3CE8" />
@@ -23,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
       </svg>
     `;
      return L.divIcon({
-      className: '', // Sin clase para evitar estilos default
+      className: '',
       html: svgHtml,
        iconSize: [38, 38],
       iconAnchor: [19, 38],
@@ -40,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
     adopcion: createIcon('/static/img/svg/adopcion_icon.svg')
   };
 
-  // Cargar datos de albergues desde JSON
   fetch('/static/data/albergues.json')
     .then(res => res.json())
     .then(data => {
@@ -52,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
       updateLayerCounts();
     });
 
-  // Datos dummy para avistados, perdidos y adopción (reemplaza con fetch real)
   const avistadosData = [
     { coords: [19.44, -99.15], info: 'Perro avistado<br>Raza: Mestizo' },
     { coords: [19.43, -99.13], info: 'Perro avistado<br>Raza: Labrador' }
@@ -80,11 +77,8 @@ document.addEventListener('DOMContentLoaded', function() {
     adopcionCluster.addLayer(m);
   });
 
-  // Añadir clusters al mapa inicialmente solo si zoom >= 12
   function updateMarkersByZoom() {
   const zoom = map.getZoom();
-
-  // Para cada capa, solo agregar si zoom >= 12 Y checkbox está activo
   [
     {layer: avistadosCluster, checkboxId: 'avistados'},
     {layer: perdidosCluster, checkboxId: 'perdidos'},
@@ -104,7 +98,6 @@ document.addEventListener('DOMContentLoaded', function() {
   map.on('zoomend', updateMarkersByZoom);
   updateMarkersByZoom();
 
-  // Panel de control personalizado
   const LayerControl = L.Control.extend({
     options: { position: 'topright' },
     onAdd: function() {
@@ -120,36 +113,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
       L.DomEvent.disableClickPropagation(container);
 
-      // Toggle panel
       const toggleBtn = container.querySelector('#toggle-control');
       toggleBtn.onclick = () => {
         container.classList.toggle('collapsed');
         toggleBtn.textContent = container.classList.contains('collapsed') ? '+' : '−';
       };
 
-      // Control de capas
       const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    //   checkboxes.forEach(cb => {
-    //     cb.addEventListener('change', function() {
-    //       const layer = this.getAttribute('data-layer');
-    //       const checked = this.checked;
-    //       switch(layer) {
-    //         case 'avistados':
-    //           checked ? map.addLayer(avistadosCluster) : map.removeLayer(avistadosCluster);
-    //           break;
-    //         case 'perdidos':
-    //           checked ? map.addLayer(perdidosCluster) : map.removeLayer(perdidosCluster);
-    //           break;
-    //         case 'albergues':
-    //           checked ? map.addLayer(alberguesCluster) : map.removeLayer(alberguesCluster);
-    //           break;
-    //         case 'adopcion':
-    //           checked ? map.addLayer(adopcionCluster) : map.removeLayer(adopcionCluster);
-    //           break;
-    //       }
-    //       updateLayerCounts();
-    //     });
-    //   });
         checkboxes.forEach(cb => {
           cb.addEventListener('change', function() {
             updateMarkersByZoom();
