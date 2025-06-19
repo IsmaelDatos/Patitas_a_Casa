@@ -33,7 +33,7 @@
     }
 
     console.log("creo ");
-    let eslaidIndex2 = 1;
+    var eslaidIndex2 = 1;
     showSlides2(eslaidIndex2)
     function plusSlides2(n){
 	eslaidIndex2 += n;
