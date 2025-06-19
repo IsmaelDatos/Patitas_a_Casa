@@ -2,16 +2,28 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Patitas a casa</title>
+  
+  <!-- CSS Libraries -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
+  
+  <!-- Map Libraries -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/home.css' %}">
+  <link rel="stylesheet" href="{% static 'css/mapa_home.css' %}">
 </head>
-<body class="bg-gray-100 font-roboto">
+
+<body class="bg-gradient-to-r from-indigo-100 to-purple-100">
   {% if messages %}
   <div class="fixed top-0 left-0 right-0 z-50">
     {% for message in messages %}
@@ -22,17 +34,68 @@
   </div>
   {% endif %}
   {% include 'navbar.html' %}
-  <div class="flex flex-col items-center justify-center py-20 text-center bg-gradient-to-r from-indigo-100 to-purple-100">
-    <h1 class="text-5xl font-bold text-black mb-4">¿Viste un perrito solo en la calle?</h1>
-    <p class="text-2xl text-gray-500 mb-8">¡Ayúdalo a encontrar su hogar!</p>
-    <a href="{% url 'avistamiento_perros:reportar_avistamiento' %}" class="bg-indigo-600 text-white text-xl font-bold py-2 px-6 rounded-full hover:bg-indigo-700 transition duration-300">
-      Reportar
-    </a>
+<section class="hero-fullscreen flex flex-col items-center justify-center min-h-screen w-full bg-gradient-to-r from-indigo-100 to-purple-100 text-center">
+  <h1 class="text-7xl md:text-7xl font-extrabold mb-6 text-black font-poppins">
+  ¿Viste un perrito<br>
+  <span class="block">solo en la calle?</span>
+</h1>
+  <p class="text-2xl md:text-4xl text-gray-600 mb-10 font-roboto">
+    ¡Ayúdalo a encontrar su hogar!
+  </p>
+  <a href="{% url 'avistamiento_perros:reportar_avistamiento' %}" class="bg-indigo-600 text-white text-2xl font-bold py-3 px-10 rounded-full hover:bg-indigo-700 transition duration-300 shadow-lg">
+    Reportar
+  </a>
+</section>
+
+  
+  <!-- Interactive Map Section -->
+  <div class="container mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden p-6 relative">
+      <h2 class="text-3xl font-bold text-indigo-800 mb-6">Mapa Interactivo</h2>
+      <p class="text-gray-600 mb-6">Explora los perros avistados, perdidos, en adopción y los albergues disponibles en tu área.</p>
+      
+      <!-- Map Container -->
+      <div id="map" style="height: 600px; border-radius: 12px;"></div>
+      
+      <!-- Map Info -->
+      <div class="mt-4 text-sm text-gray-500">
+        <p><i class="fas fa-info-circle mr-2"></i> Usa el zoom para ver más detalles. Los marcadores aparecen a partir del nivel 12 de zoom.</p>
+      </div>
+      
+      <!-- Map Legend -->
+      <div class="map-leyenda">
+        <div>
+          <div style="background:#5A3CE8; width:20px; height:20px; border-radius:50%; display:flex; justify-content:center; align-items:center;">
+            <img src="/static/img/svg/visto_icon.svg" alt="Avistados" style="width:14px; filter: invert(0);" />
+          </div>
+          <span>Perros avistados</span>
+        </div>
+        <div>
+          <div style="background:#5A3CE8; width:20px; height:20px; border-radius:50%; display:flex; justify-content:center; align-items:center;">
+            <img src="/static/img/svg/perdido_icon.svg" alt="Perdidos" style="width:14px; filter: invert(0);" />
+          </div>
+          <span>Perros perdidos</span>
+        </div>
+        <div>
+          <div style="background:#5A3CE8; width:20px; height:20px; border-radius:50%; display:flex; justify-content:center; align-items:center;">
+            <img src="/static/img/svg/albergue_icon.svg" alt="Albergues" style="width:14px; filter: invert(0);" />
+          </div>
+          <span>Albergues</span>
+        </div>
+        <div>
+          <div style="background:#5A3CE8; width:20px; height:20px; border-radius:50%; display:flex; justify-content:center; align-items:center;">
+            <img src="/static/img/svg/adopcion_icon.svg" alt="Adopción" style="width:14px; filter: invert(0);" />
+          </div>
+          <span>Perros en adopción</span>
+        </div>
+      </div>
+    </div>
   </div>
   
-  <!-- Resto del contenido... -->
+  <!-- Content Sections -->
   <div class="container mx-auto px-4 py-12">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Recent Sightings -->
       <div class="bg-white rounded-lg shadow-lg overflow-hidden">
         <div class="bg-indigo-600 text-white p-4">
           <h2 class="text-2xl font-bold">Perros vistos recientemente</h2>
@@ -67,6 +130,8 @@
           {% endif %}
         </div>
       </div>
+      
+      <!-- Lost Dogs -->
       <div class="bg-white rounded-lg shadow-lg overflow-hidden">
         <div class="bg-amber-500 text-white p-4">
           <h2 class="text-2xl font-bold">Perros buscados</h2>
@@ -83,25 +148,13 @@
     </div>
   </div>
   
-  <div class="modal fade" id="confirmacionModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Reporte enviado</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>¡Gracias por reportar este avistamiento! Tu ayuda es invaluable para reunir a las mascotas con sus familias.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
+  <!-- JavaScript Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
   
-<script src="{% static 'js/home.js' %}"></script>
+  <!-- Custom JavaScript -->
+  <script src="{% static 'js/home.js' %}"></script>
+  <script src="{% static 'js/mapa_home.js' %}"></script>
 </body>
 </html>

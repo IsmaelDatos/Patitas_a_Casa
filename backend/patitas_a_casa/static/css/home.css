@@ -1,89 +1,17 @@
-    .navbar {
-      margin: auto;
-      display: flex;
-      padding: 0.5rem 1.5rem;
-      background: #272459;
-      border-radius: 3rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    .hero-fullscreen {
+    min-height: 100vh; /* Ocupa toda la pantalla */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2rem;
+    background: linear-gradient(90deg, #e0e7ff 0%, #ede9fe 100%);
     }
-    
-    .nav-enlaces {
-      margin: auto;
-      display: flex;
-      gap: 2rem;
-      font-size: 20px;
-      align-items: center;
+
+    .font-poppins {
+    font-family: 'Poppins', sans-serif;
     }
-    
-    .nav-enlace, .desplegable li {
-      list-style: none;
-      height: 100%;
-      padding: 0.5rem 1rem;
-      font-weight: 1000;
-      cursor: pointer;
-      margin: auto;
-    }
-    
-    a {
-      text-decoration: none;
-      color: currentColor;
-    }
-    
-    .desplegable {
-      position: absolute;
-      padding: 0.5rem 0;
-      margin: 0.5rem -0.5rem;
-      background: #8a6ff0;
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      border-radius: 0.5rem;
-      font-size: 18px;
-      display: none;
-    }
-    
-    .nav-enlace:hover {
-      background-color: #8a6ff0;
-      color: #fff;
-      border-radius: 0.5rem;
-    }
-    
-    .secciones:hover .desplegable {
-      display: block;
-    }
-    
-    .secciones a {
-      margin: auto;
-      display: flex;
-      color: #fff;
-    }
-    
-    .desplegable li:hover {
-      background: #6a4fcf;
-      color: #fff;
-      border-radius: 0.5rem;
-    }
-    
-    #logo {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background-color: #8a6ff0;
-    }
-    
-    #proyecto_nombre {
-      margin-right: 100px;
-      color: #fff;
-      font-size: 23px;
-      font-weight: 1000;
-    }
-    
-    .user-icon {
-      font-size: 1.8rem;
-      color: white;
-      transition: all 0.3s;
-    }
-    
-    .user-icon:hover {
-      color: #d8d8d8;
-      transform: scale(1.1);
+
+    .font-roboto {
+    font-family: 'Roboto', sans-serif;
     }

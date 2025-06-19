@@ -266,4 +266,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-# # #-------------------------CONFIG-JAVIER-------------------------
+#-------------------------CONFIG-JAVIER-------------------------

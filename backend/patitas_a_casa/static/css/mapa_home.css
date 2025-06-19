@@ -1,0 +1,139 @@
+#map {
+  width: 100%;
+  height: 600px;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  z-index: 1;
+}
+
+.layer-control {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+  padding: 15px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  color: #5A3CE8;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 600;
+}
+
+
+.layer-control.collapsed {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  padding: 5px;
+}
+
+.layer-control h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+.layer-control label {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4B2995;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.layer-control input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  accent-color: #5A3CE8;
+  border-radius: 6px;
+  transition: transform 0.2s ease;
+}
+
+.layer-control input[type="checkbox"]:hover {
+  transform: scale(1.1);
+}
+
+.layer-count {
+  background-color: #5A3CE8;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  min-width: 24px;
+  text-align: center;
+}
+
+#toggle-control {
+  background: transparent;
+  border: none;
+  color: #5A3CE8;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-top: 10px;
+  user-select: none;
+  float: right;
+}
+
+/* Estilos para los clusters */
+.marker-cluster {
+  background-color: rgba(90, 60, 232, 0.6);
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.marker-cluster div {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #5A3CE8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Popup personalizado */
+.leaflet-popup-content-wrapper {
+  font-family: 'Roboto', sans-serif;
+  color: #5A3CE8;
+  font-weight: 600;
+}
+
+.leaflet-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
+.map-leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  align-items: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9rem;
+  color: #4B2995;
+  margin-top: 1rem;
+  border-top: 1px solid #ccc;
+  padding-top: 0.75rem;
+}
+
+.map-leyenda > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.map-leyenda img {
+  filter: invert(1);
+  width: 16px;
+  height: auto;
+}
