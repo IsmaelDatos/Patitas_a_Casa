@@ -3,7 +3,7 @@
 .navbar {
     font-weight: 700;
     font-family: 'Poppins', sans-serif;
-    margin: 1.5cm auto 0 auto;
+    margin: 1cm auto 0 auto;
     display: flex;
     padding: 0.5rem 2rem;
     background: #272459;
@@ -30,6 +30,7 @@
 
 /* Elementos de navegación */
 .nav-enlace, .user-menu {
+    font-size: 1.35rem;
     position: relative;
     height: 100%;
     display: flex;
@@ -38,6 +39,7 @@
 }
 
 .nav-enlace > a, .user-icon {
+    font-size: 1.35rem;
     color: white;
     font-weight: 600;
     padding: 0.5rem 1rem;
@@ -108,7 +110,7 @@
 
 #proyecto_nombre {
     color: #fff;
-    font-size: 1.3rem;
+    font-size: 2rem;
     font-weight: bold;
     margin: 0;
     white-space: nowrap;
