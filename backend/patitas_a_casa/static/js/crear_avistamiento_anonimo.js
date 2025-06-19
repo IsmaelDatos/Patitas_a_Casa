@@ -1,6 +1,6 @@
   	/*Aqui va lo del carrusel*/
     console.log("declaro slideIndex");
-    let slideIndex = 1;
+    var slideIndex = 1;
     showSlides(slideIndex)
     console.log("llamo a showSlides");
     function plusSlides(n){
