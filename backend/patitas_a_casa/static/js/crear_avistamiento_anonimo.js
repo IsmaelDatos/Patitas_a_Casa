@@ -1,3 +1,67 @@
+  	/*Aqui va lo del carrusel*/
+    let slideIndex = 1;
+    showSlides(slideIndex)
+
+    function plusSlides(n){
+        showSlides(slideIndex += n)
+    }
+    function currentSlide(n){
+        showSlides(slideIndex = n)
+    }
+    function showSlides(n){
+        let i;
+        let slides = document.querySelectorAll(".mySlides");
+        //let quadrates = document.querySelectorAll(".quadrate"); 
+        if(n > slides.length) slideIndex = 1
+        if(n < 1) slideIndex = slides.length
+        for(i = 0; i < slides.length; i++){
+            slides[i].style.display = "none"
+    	}
+    //for(i = 0; i < quadrates.length;i++){
+    //    quadrates[i].className = quadrates[i].className.replace("active","")
+    //}
+        slides[slideIndex-1].style.display = "block";
+    //quadrates[slideIndex-1].className += " active";
+    }
+    
+    let slideIndex2 = 1;
+    showSlides2(slideIndex2)
+    function plusSlides2(n){
+        showSlides2(slideIndex2 += n)
+    }
+    function currentSlide2(n){
+        showSlides2(slideIndex2 = n)
+    }
+    function showSlides2(n){
+        let i;
+        let slides2 = document.querySelectorAll(".mySlides2");
+        //let quadrates = document.querySelectorAll(".quadrate"); 
+        if(n > slides2.length) slideIndex2 = 1
+        if(n < 1) slideIndex2 = slides2.length
+        for(i = 0; i < slides2.length; i++){
+            slides2[i].style.display = "none"
+    	}
+    //for(i = 0; i < quadrates.length;i++){
+    //    quadrates[i].className = quadrates[i].className.replace("active","")
+    //}
+        slides2[slideIndex2-1].style.display = "block";
+    //quadrates[slideIndex-1].className += " active";
+    }
+    function prueba(cosa){
+    	var raza = document.getElementById('raza');
+    	raza[0].value = cosa;
+    	raza[0].selected = true;
+    	raza.selectedOptions[0].innerHTML = cosa;
+    }
+    
+    function prueba2(cosa){
+    	var patron_pelo = document.getElementById('patron_pelo');
+    	patron_pelo[0].value = cosa;
+    	patron_pelo[0].selected = true;
+    	patron_pelo[0].innerHTML = cosa;
+    	
+    }
+	 /*Aqui finaliza lo del carrusel*/
     function mostrarCampos() {
       var identificador = document.getElementById("identificador").value;
       var color_collar = document.getElementById("color_collar");
@@ -301,67 +365,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-  	/*Aqui va lo del carrusel*/
-    let slideIndex = 1;
-    showSlides(slideIndex)
 
-    function plusSlides(n){
-        showSlides(slideIndex += n)
-    }
-    function currentSlide(n){
-        showSlides(slideIndex = n)
-    }
-    function showSlides(n){
-        let i;
-        let slides = document.querySelectorAll(".mySlides");
-        //let quadrates = document.querySelectorAll(".quadrate"); 
-        if(n > slides.length) slideIndex = 1
-        if(n < 1) slideIndex = slides.length
-        for(i = 0; i < slides.length; i++){
-            slides[i].style.display = "none"
-    	}
-    //for(i = 0; i < quadrates.length;i++){
-    //    quadrates[i].className = quadrates[i].className.replace("active","")
-    //}
-        slides[slideIndex-1].style.display = "block";
-    //quadrates[slideIndex-1].className += " active";
-    }
-    
-    let slideIndex2 = 1;
-    showSlides2(slideIndex2)
-    function plusSlides2(n){
-        showSlides2(slideIndex2 += n)
-    }
-    function currentSlide2(n){
-        showSlides2(slideIndex2 = n)
-    }
-    function showSlides2(n){
-        let i;
-        let slides2 = document.querySelectorAll(".mySlides2");
-        //let quadrates = document.querySelectorAll(".quadrate"); 
-        if(n > slides2.length) slideIndex2 = 1
-        if(n < 1) slideIndex2 = slides2.length
-        for(i = 0; i < slides2.length; i++){
-            slides2[i].style.display = "none"
-    	}
-    //for(i = 0; i < quadrates.length;i++){
-    //    quadrates[i].className = quadrates[i].className.replace("active","")
-    //}
-        slides2[slideIndex2-1].style.display = "block";
-    //quadrates[slideIndex-1].className += " active";
-    }
-    function prueba(cosa){
-    	var raza = document.getElementById('raza');
-    	raza[0].value = cosa;
-    	raza[0].selected = true;
-    	raza.selectedOptions[0].innerHTML = cosa;
-    }
-    
-    function prueba2(cosa){
-    	var patron_pelo = document.getElementById('patron_pelo');
-    	patron_pelo[0].value = cosa;
-    	patron_pelo[0].selected = true;
-    	patron_pelo[0].innerHTML = cosa;
-    	
-    }
-	 /*Aqui finaliza lo del carrusel*/
