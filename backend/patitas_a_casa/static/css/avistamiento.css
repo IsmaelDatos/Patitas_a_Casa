@@ -208,3 +208,95 @@
 #shelter-options::-webkit-scrollbar-thumb:hover {
     background: #a1a1a1;
 }
+
+/* ============ ESTILOS PARA LOS CARRUSELES DE IMÁGENES ============ */
+
+/* El cuadrito donde se queda incrustada la imagen */
+.container{
+    width: 50%;
+    position: relative;
+}
+
+/* c/u de las imagenes */
+.mySlides{
+    display: none;
+}
+
+/* c/u de las imagenes, pero más especifico (tamaño, filtros, etc) */
+.mySlides img{
+    width: 100%;
+}
+
+/* filtros para las imagenes cuando le pasamos el mouse por encima */
+.mySlides img:hover{
+    filter: blur(4px);
+    cursor: pointer;
+}
+
+/* c/u de las imágenes del segundo carrusel */
+.mySlides2{
+    display: none;
+}
+
+/* c/u de las imagenes del segundo carrusel, pero más especifico (tamaño, filtros, etc) */
+.mySlides2 img{
+    width: 35em;
+    height: 35em;
+}
+
+/* las imagenes del segundo carrusel, cuando les pasamos el mouse encima*/
+.mySlides2 img:hover{
+    filter: blur(4px);
+    cursor: pointer;
+}
+
+/* Los botoncitos para echarse para adelante o para atras en el carrusel */
+.prev,
+.next{
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6 ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    border:  solid #fff 2px;
+}
+
+/* propiedades especificas del botoncito para ir adelante */
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* Los botoncitos para moverse por el carrusel, cuando les pasamos 
+el mouse por encima */
+.prev:hover,
+.next:hover{
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.elements{
+    text-align: center;
+}
+
+/* Diseño responsivo  */
+@media screen and (max-width:900px) {
+    .container{
+        width: 100%;
+    }
+}
+@media screen and (max-width:500px) {
+    .container{
+        width: 100%;
+    }
+    .prev,
+    .next{
+        padding: 5px;
+    }
+}
