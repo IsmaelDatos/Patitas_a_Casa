@@ -4,7 +4,13 @@
       "type": "group",
       "attributes": {
         "name": "Servicio de Razas en Desarrollo",
-        "description": "Razas en proceso de reconocimiento oficial"
+        "description": "Razas en proceso de reconocimiento oficial",
+        "size_brackets": [
+              { "label": "pequeño",     "kg": { "min": 7,  "max": 15 } },
+              { "label": "mediano",     "kg": { "min": 15, "max": 30 } },
+              { "label": "grande",      "kg": { "min": 30, "max": 45 } },
+              { "label": "muy_grande",  "kg": { "min": 45, "max": null } }
+            ]
       },
       "relationships": {
         "breeds": {
@@ -306,7 +312,13 @@
       "type": "group",
       "attributes": {
         "name": "Grupo de Pastoreo",
-        "description": "Razas desarrolladas para pastorear y manejar ganado"
+        "description": "Razas desarrolladas para pastorear y manejar ganado",
+        "size_brackets": [
+              { "label": "pequeño",     "kg": { "min": 10, "max": 20 } },
+              { "label": "mediano",     "kg": { "min": 20, "max": 30 } },
+              { "label": "grande",      "kg": { "min": 30, "max": 45 } },
+              { "label": "muy_grande",  "kg": { "min": 45, "max": null } }
+            ]
       },
       "relationships": {
         "breeds": {
@@ -448,7 +460,13 @@
       "type": "group",
       "attributes": {
         "name": "Grupo de Sabuesos",
-        "description": "Razas especializadas en rastreo y caza por olfato o vista"
+        "description": "Razas especializadas en rastreo y caza por olfato o vista",
+        "size_brackets": [
+              { "label": "pequeño",     "kg": { "min": 10, "max": 20 } },
+              { "label": "mediano",     "kg": { "min": 20, "max": 35 } },
+              { "label": "grande",      "kg": { "min": 35, "max": 50 } },
+              { "label": "muy_grande",  "kg": { "min": 50, "max": null } }
+            ]
       },
       "relationships": {
         "breeds": {
@@ -590,7 +608,13 @@
       "type": "group",
       "attributes": {
         "name": "No Deportivo",
-        "description": "Razas diversas sin función específica"
+        "description": "Razas diversas sin función específica",
+        "size_brackets": [
+              { "label": "pequeño",     "kg": { "min": 7,  "max": 15 } },
+              { "label": "mediano",     "kg": { "min": 15, "max": 25 } },
+              { "label": "grande",      "kg": { "min": 25, "max": 40 } },
+              { "label": "muy_grande",  "kg": { "min": 40, "max": null } }
+            ]
       },
       "relationships": {
         "breeds": {
@@ -688,7 +712,13 @@
       "type": "group",
       "attributes": {
         "name": "Grupo Deportivo",
-        "description": "Razas desarrolladas para la caza y recuperación de aves"
+        "description": "Razas desarrolladas para la caza y recuperación de aves",
+        "size_brackets": [
+              { "label": "pequeño",     "kg": { "min": 15, "max": 25 } },
+              { "label": "mediano",     "kg": { "min": 25, "max": 35 } },
+              { "label": "grande",      "kg": { "min": 35, "max": 50 } },
+              { "label": "muy_grande",  "kg": { "min": 50, "max": null } }
+            ]
       },
       "relationships": {
         "breeds": {
@@ -830,7 +860,13 @@
       "type": "group",
       "attributes": {
         "name": "Grupo Terrier",
-        "description": "Razas activas desarrolladas para cazar alimañas"
+        "description": "Razas activas desarrolladas para cazar alimañas",
+        "size_brackets": [
+              { "label": "pequeño",     "kg": { "min": 7,  "max": 12 } },
+              { "label": "mediano",     "kg": { "min": 12, "max": 18 } },
+              { "label": "grande",      "kg": { "min": 18, "max": 30 } },
+              { "label": "muy_grande",  "kg": { "min": 30, "max": null } }
+            ]
       },
       "relationships": {
         "breeds": {
@@ -968,7 +1004,13 @@
       "type": "group",
       "attributes": {
         "name": "Toy",
-        "description": "Razas pequeñas de compañía"
+        "description": "Razas pequeñas de compañía",
+        "size_brackets": [
+              { "label": "pequeño",     "kg": { "min": 0,  "max": 4 } },
+              { "label": "mediano",     "kg": { "min": 4,  "max": 6 } },
+              { "label": "grande",      "kg": { "min": 6,  "max": 8 } },
+              { "label": "muy_grande",  "kg": { "min": 8,  "max": 12 } }
+            ]
       },
       "relationships": {
         "breeds": {
@@ -1074,7 +1116,13 @@
       "type": "group",
       "attributes": {
         "name": "Grupo de Trabajo",
-        "description": "Razas fuertes desarrolladas para labores de guardia, rescate o arrastre"
+        "description": "Razas fuertes desarrolladas para labores de guardia, rescate o arrastre",
+        "size_brackets": [
+              { "label": "pequeño",     "kg": { "min": 20, "max": 30 } },
+              { "label": "mediano",     "kg": { "min": 30, "max": 45 } },
+              { "label": "grande",      "kg": { "min": 45, "max": 60 } },
+              { "label": "muy_grande",  "kg": { "min": 60, "max": null } }
+            ]
       },
       "relationships": {
         "breeds": {
@@ -1212,7 +1260,13 @@
       "type": "group",
       "attributes": {
         "name": "Clase Miscelánea",
-        "description": "Razas que no encajan en otras categorías principales"
+        "description": "Razas que no encajan en otras categorías principales",
+        "size_brackets": [
+              { "label": "pequeño",     "kg": { "min": 7,  "max": 15 } },
+              { "label": "mediano",     "kg": { "min": 15, "max": 30 } },
+              { "label": "grande",      "kg": { "min": 30, "max": 45 } },
+              { "label": "muy_grande",  "kg": { "min": 45, "max": null } }
+            ]
       },
       "relationships": {
         "breeds": {

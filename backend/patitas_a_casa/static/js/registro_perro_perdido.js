@@ -1,335 +1,493 @@
+// //segmentar en secciones porque me confundo xd
 document.addEventListener('DOMContentLoaded', function() {
-    // Variables para el formulario multipaso
-    const formSteps = document.querySelectorAll('.form-step');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const submitBtn = document.getElementById('submitBtn');
-    const progressSteps = document.querySelectorAll('.progress-step');
-    let currentStep = 0;
-    
-    // Mostrar el paso actual
-    function showStep(step) {
-        formSteps.forEach((formStep, index) => {
-            formStep.classList.toggle('active', index === step);
+    // ========== CONFIG INICIAL ==========
+    const pasosFormulario = document.querySelectorAll('.form-step');
+    const botonAnterior = document.getElementById('prevBtn');
+    const botonSiguiente = document.getElementById('nextBtn');
+    const botonEnviar = document.getElementById('submitBtn');
+    const pasosProgreso = document.querySelectorAll('.progress-step');
+    let pasoActual = 0;
+
+    // ========== FUNCIONES PRINCIPALES ==========
+    function combinarFechaHora() {
+        const fecha = document.getElementById('fecha_perdida').value;
+        const hora = document.getElementById('hora_perdida').value;
+        if (fecha && hora) {
+            return `${fecha}T${hora}:00`;  // Formato ISO 8601
+        }
+        return null;
+    }
+
+    function mostrarPaso(paso) {
+        pasosFormulario.forEach((pasoForm, indice) => {
+            pasoForm.classList.toggle('active', indice === paso);
         });
         
-        // Actualizar botones de navegación
-        prevBtn.disabled = step === 0;
-        nextBtn.style.display = step === formSteps.length - 1 ? 'none' : 'block';
-        submitBtn.style.display = step === formSteps.length - 1 ? 'block' : 'none';
+        botonAnterior.disabled = paso === 0;
+        botonSiguiente.style.display = paso === pasosFormulario.length - 1 ? 'none' : 'block';
+        botonEnviar.style.display = paso === pasosFormulario.length - 1 ? 'block' : 'none';
         
-        // Actualizar barra de progreso
-        progressSteps.forEach((progressStep, index) => {
-            const bubble = progressStep.querySelector('.step-bubble');
-            const label = progressStep.querySelector('.step-label');
+        pasosProgreso.forEach((pasoProgreso, indice) => {
+            const circulo = pasoProgreso.querySelector('.step-bubble');
+            const etiqueta = pasoProgreso.querySelector('.step-label');
             
-            if (index < step) {
-                bubble.classList.remove('active');
-                bubble.classList.add('completed');
-                label.classList.remove('active');
-            } else if (index === step) {
-                bubble.classList.add('active');
-                bubble.classList.remove('completed');
-                label.classList.add('active');
+            if (indice < paso) {
+                circulo.classList.remove('active');
+                circulo.classList.add('completed');
+                etiqueta.classList.remove('active');
+            } else if (indice === paso) {
+                circulo.classList.add('active');
+                circulo.classList.remove('completed');
+                etiqueta.classList.add('active');
             } else {
-                bubble.classList.remove('active', 'completed');
-                label.classList.remove('active');
+                circulo.classList.remove('active', 'completed');
+                etiqueta.classList.remove('active');
             }
         });
-        
-        // Generar resumen en el último paso
-        if (step === formSteps.length - 1) {
-            generateSummary();
+
+        // Redibujar mapa cuando se muestra el paso 4
+        if (paso === 3) {
+            setTimeout(() => {
+                map.invalidateSize();
+                map.setView(map.getCenter(), map.getZoom());
+            }, 300);
         }
     }
-    
-    // Validación de cada paso
-    function validateStep(step) {
-        let isValid = true;
-        const currentFormStep = formSteps[step];
-        const requiredInputs = currentFormStep.querySelectorAll('[required]');
+
+    function validarPaso(paso) {
+        let esValido = true;
+        const pasoActualForm = pasosFormulario[paso];
+        const inputsRequeridos = pasoActualForm.querySelectorAll('[required]');
         
-        requiredInputs.forEach(input => {
+        inputsRequeridos.forEach(input => {
             if (!input.value.trim()) {
-                input.style.borderColor = 'var(--accent-color)';
-                isValid = false;
+                input.style.borderColor = '#ff4444';
+                esValido = false;
             } else {
                 input.style.borderColor = '';
             }
         });
-        
-        // Validación especial para fotos
-        if (step === 0) {
-            const photoInput = document.getElementById('dogPhotos');
-            if (photoInput.files.length === 0) {
-                alert('Por favor sube al menos una foto del perro');
-                isValid = false;
-            } else if (photoInput.files.length > 3) {
-                alert('Máximo 3 fotos permitidas');
-                isValid = false;
-            }
+
+        switch(paso) {
+            case 0:
+                const fecha = document.getElementById('fecha_perdida').value;
+                    const hora = document.getElementById('hora_perdida').value;
+                    if (!fecha || !hora) {
+                        mostrarAlerta('Por favor completa fecha y hora');
+                        esValido = false;
+                    }
+                const inputFotos = document.getElementById('dogPhotos');
+                if (inputFotos.files.length === 0) {
+                    mostrarAlerta('Por favor sube al menos una foto del perro');
+                    esValido = false;
+                } else if (inputFotos.files.length > 3) {
+                    mostrarAlerta('Máximo 3 fotos permitidas');
+                    esValido = false;
+                }
+                break;
+                
+            case 3:
+                const codigoPostal = document.getElementById('codigo_postal');
+                if (!/^\d{5}$/.test(codigoPostal.value)) {
+                    mostrarAlerta('Código postal inválido (5 dígitos requeridos)');
+                    esValido = false;
+                }
+                break;
         }
         
-        // Validación especial para código postal
-        if (step === 3) {
-            const postalCode = document.getElementById('postalCode');
-            if (!/^\d{5}$/.test(postalCode.value)) {
-                postalCode.style.borderColor = 'var(--accent-color)';
-                alert('Por favor ingresa un código postal válido de 5 dígitos');
-                isValid = false;
-            } else {
-                postalCode.style.borderColor = '';
-            }
-        }
-        
-        return isValid;
+        return esValido;
     }
+
+    function mostrarAlerta(mensaje) {
+        const alertaDiv = document.createElement('div');
+        alertaDiv.className = 'form-alert';
+        alertaDiv.textContent = mensaje;
+        document.querySelector('.perdido-container').prepend(alertaDiv);
+        setTimeout(() => alertaDiv.remove(), 5000);
+    }
+
+    // ========== RAZAS Y TAMAÑOS ==========
+    const selectRaza = document.getElementById('raza');
+    const selectTamaño = document.getElementById('tamaño');
+    let datosRazas = [];
+    let datosGrupos = [];
     
-    // Generar resumen del formulario
-    function generateSummary() {
-        const summaryDiv = document.createElement('div');
-        summaryDiv.innerHTML = '<h3>Resumen de tu reporte</h3><ul>';
-        
-        // Información básica
-        summaryDiv.innerHTML += `<li><strong>Nombre del perro:</strong> ${document.getElementById('dogName').value}</li>`;
-        summaryDiv.innerHTML += `<li><strong>Visto por última vez:</strong> ${document.getElementById('lastSeenDate').value} a las ${document.getElementById('lastSeenTime').value}</li>`;
-        
-        // Fotos
-        const photoInput = document.getElementById('dogPhotos');
-        summaryDiv.innerHTML += `<li><strong>Fotos subidas:</strong> ${photoInput.files.length}</li>`;
-        
-        // Descripción
-        summaryDiv.innerHTML += `<li><strong>Raza:</strong> ${document.getElementById('dogBreed').value}</li>`;
-        summaryDiv.innerHTML += `<li><strong>Sexo:</strong> ${document.querySelector('input[name="dogGender"]:checked').value}</li>`;
-        summaryDiv.innerHTML += `<li><strong>Tamaño:</strong> ${document.getElementById('dogSize').value}</li>`;
-        summaryDiv.innerHTML += `<li><strong>Edad:</strong> ${document.getElementById('dogAge').value}</li>`;
-        summaryDiv.innerHTML += `<li><strong>Color principal:</strong> ${document.getElementById('primaryColor').value}</li>`;
-        summaryDiv.innerHTML += `<li><strong>Descripción:</strong> ${document.getElementById('dogDescription').value}</li>`;
-        
-        // Identificación y salud
-        const identifiers = [];
-        document.querySelectorAll('input[name="identifiers"]:checked').forEach(checkbox => {
-            identifiers.push(checkbox.value);
+    fetch('/static/data/razas.json')
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            datosRazas = datos;
+            inicializarSelectRaza();
         });
-        summaryDiv.innerHTML += `<li><strong>Identificadores:</strong> ${identifiers.join(', ') || 'Ninguno'}</li>`;
-        
-        if (document.getElementById('identifierDetails').value) {
-            summaryDiv.innerHTML += `<li><strong>Detalles identificador:</strong> ${document.getElementById('identifierDetails').value}</li>`;
-        }
-        
-        summaryDiv.innerHTML += `<li><strong>Vacunas al día:</strong> ${document.querySelector('input[name="vaccinated"]:checked').value}</li>`;
-        
-        if (document.getElementById('vaccineDetails').value) {
-            summaryDiv.innerHTML += `<li><strong>Detalles vacunas:</strong> ${document.getElementById('vaccineDetails').value}</li>`;
-        }
-        
-        if (document.getElementById('healthDetails').value) {
-            summaryDiv.innerHTML += `<li><strong>Problemas de salud:</strong> ${document.getElementById('healthDetails').value}</li>`;
-        }
-        
-        // Ubicación
-        summaryDiv.innerHTML += `<li><strong>Ubicación:</strong> C.P. ${document.getElementById('postalCode').value}, ${document.getElementById('neighborhood').value}, ${document.getElementById('city').value}, ${document.getElementById('state').value}</li>`;
-        
-        if (document.getElementById('addressDetails').value) {
-            summaryDiv.innerHTML += `<li><strong>Detalles ubicación:</strong> ${document.getElementById('addressDetails').value}</li>`;
-        }
-        
-        // Contacto
-        summaryDiv.innerHTML += `<li><strong>Contacto:</strong> ${document.getElementById('contactName').value}, Tel: ${document.getElementById('contactPhone').value}</li>`;
-        
-        if (document.getElementById('contactEmail').value) {
-            summaryDiv.innerHTML += `<li><strong>Email:</strong> ${document.getElementById('contactEmail').value}</li>`;
-        }
-        
-        if (document.getElementById('additionalContact').value) {
-            summaryDiv.innerHTML += `<li><strong>Otro contacto:</strong> ${document.getElementById('additionalContact').value}</li>`;
-        }
-        
-        if (document.getElementById('reward').value) {
-            summaryDiv.innerHTML += `<li><strong>Recompensa:</strong> ${document.getElementById('reward').value}</li>`;
-        }
-        
-        summaryDiv.innerHTML += '</ul>';
-        
-        // Limpiar y mostrar el resumen
-        const formSummary = document.getElementById('formSummary');
-        if (formSummary) {
-            formSummary.innerHTML = '';
-            formSummary.appendChild(summaryDiv);
-        }
+
+    fetch('/static/data/grupos.json')
+        .then(respuesta => respuesta.json())
+        .then(datos => datosGrupos = datos);
+
+    function inicializarSelectRaza() {
+        datosRazas.forEach(raza => {
+            const opcion = document.createElement('option');
+            opcion.value = raza.id;
+            opcion.textContent = raza.attributes.name;
+            selectRaza.appendChild(opcion);
+        });
+        new Choices(selectRaza, {
+            searchEnabled: true,
+            itemSelectText: 'Seleccionar',
+            placeholderValue: 'Busca una raza...'
+        });
     }
-    
-    // Manejo de subida de fotos
-    const photoUpload = document.getElementById('photoUpload');
-    const photoInput = document.getElementById('dogPhotos');
-    const photoPreview = document.getElementById('photoPreview');
-    const noPhotosMessage = document.createElement('p');
 
-    noPhotosMessage.textContent = 'No hay fotos seleccionadas';
-    noPhotosMessage.className = 'no-photos-message';
-    photoPreview.appendChild(noPhotosMessage);
+    selectRaza.addEventListener('change', function() {
+        const razaSeleccionada = datosRazas.find(r => r.id === this.value);
+        if (!razaSeleccionada) return;
+        
+        const idGrupo = razaSeleccionada.relationships.group.data.id;
+        const grupo = datosGrupos.find(g => g.id === idGrupo);
+        
+        actualizarOpcionesTamaño(grupo.attributes.size_brackets);
+    });
 
-    photoUpload.addEventListener('click', function() {
-        photoInput.click();
+    function actualizarOpcionesTamaño(rangosTamaño) {
+        selectTamaño.innerHTML = '';
+        selectTamaño.disabled = false;
+        
+        rangosTamaño.forEach(rango => {
+            const opcion = document.createElement('option');
+            opcion.value = rango.label;
+            opcion.textContent = `${rango.label} (${rango.kg.min}-${rango.kg.max || 'más'} kg)`;
+            selectTamaño.appendChild(opcion);
+        });
+    }
+
+    // ========== VACUNAS ==========
+    const radiosVacunas = document.querySelectorAll('input[name="vacunado"]');
+    const opcionesVacunas = document.getElementById('vaccineOptions');
+
+    radiosVacunas.forEach(radio => {
+        radio.addEventListener('change', function() {
+            opcionesVacunas.style.display = this.value === 'yes' ? 'block' : 'none';
+        });
+    });
+
+        // ========== IMÁGENES ==========
+    const areaSubida = document.getElementById('photoUpload');
+    const inputFotos = document.getElementById('dogPhotos');
+    const previsualizacionFotos = document.getElementById('photoPreview');
+    const inputFotosBase64 = document.getElementById('dogPhotosBase64');
+
+    areaSubida.addEventListener('click', function(e) {
+        e.stopPropagation();
+        inputFotos.click();
     });
     
-    photoInput.addEventListener('change', function() {
-        photoPreview.innerHTML = '';
-        if (this.files.length > 3) {
-            alert('Máximo 3 fotos permitidas');
-            this.value = '';
+    inputFotos.addEventListener('change', function() {
+        previsualizacionFotos.innerHTML = '';
+        const archivos = Array.from(this.files).slice(0, 3);
+        
+        if (archivos.length === 0) {
+            mostrarMensajeSinFotos();
             return;
         }
         
-        Array.from(this.files).forEach((file, index) => {
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                const photoContainer = document.createElement('div');
-                photoContainer.className = 'photo-container';
-                
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.className = 'photo-thumbnail';
-                img.alt = `Foto ${index + 1} del perro`;
-                
-                const deleteBtn = document.createElement('button');
-                deleteBtn.innerHTML = '&times;';
-                deleteBtn.className = 'delete-photo-btn';
-                deleteBtn.title = 'Eliminar foto';
-                
-                // Eliminar foto al hacer clic en el botón
-                deleteBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    
-                    // Crear nueva lista de archivos sin la foto eliminada
-                    const newFiles = Array.from(photoInput.files).filter((_, i) => i !== index);
-                    
-                    // Actualizar el input de archivos
-                    const dataTransfer = new DataTransfer();
-                    newFiles.forEach(file => dataTransfer.items.add(file));
-                    photoInput.files = dataTransfer.files;
-                    
-                    // Volver a disparar el evento change
-                    photoInput.dispatchEvent(new Event('change'));
-                });
-                
-                photoContainer.appendChild(img);
-                photoContainer.appendChild(deleteBtn);
-                photoPreview.appendChild(photoContainer);
-            };
-            
-            reader.readAsDataURL(file);
-        });
-    });
-    
-    // Mostrar/ocultar detalles de identificador
-    const identifierCheckboxes = document.querySelectorAll('input[name="identifiers"]');
-    const identifierDetailsGroup = document.getElementById('identifierDetailsGroup');
-    
-    identifierCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const anyChecked = Array.from(identifierCheckboxes).some(cb => cb.checked && cb.value !== 'none');
-            identifierDetailsGroup.style.display = anyChecked ? 'block' : 'none';
-            
-            if (this.value === 'none' && this.checked) {
-                identifierCheckboxes.forEach(cb => {
-                    if (cb.value !== 'none') cb.checked = false;
-                });
-                identifierDetailsGroup.style.display = 'none';
-            } else if (this.value !== 'none' && this.checked) {
-                document.querySelector('input[name="identifiers"][value="none"]').checked = false;
-            }
-        });
-    });
-    
-    // Inicializar mapa Leaflet
-    const map = L.map('map').setView([19.4326, -99.1332], 11);
-    
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-    
-    let marker = L.marker([19.4326, -99.1332], {draggable: true}).addTo(map);
-    
-    marker.on('dragend', function() {
-        const latLng = marker.getLatLng();
-        getAddressFromCoordinates(latLng.lat, latLng.lng);
-    });
-    
-    map.on('click', function(e) {
-        marker.setLatLng(e.latlng);
-        getAddressFromCoordinates(e.latlng.lat, e.latlng.lng);
-    });
-    
-    // Autocompletado por código postal
-    const postalCodeInput = document.getElementById('postalCode');
-    postalCodeInput.addEventListener('blur', function() {
-        const cp = this.value.trim();
-        if (cp.length === 5 && /^\d{5}$/.test(cp)) {
-            fetch(`https://api.zippopotam.us/mx/${cp}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.places && data.places.length > 0) {
-                        const place = data.places[0];
-                        document.getElementById('state').value = place.state;
-                        document.getElementById('city').value = place['place name'];
-                        document.getElementById('neighborhood').value = place['place name'];
-                        
-                        // Centrar mapa en la ubicación del CP
-                        const lat = parseFloat(place.latitude);
-                        const lng = parseFloat(place.longitude);
-                        if (!isNaN(lat) && !isNaN(lng)) {
-                            map.setView([lat, lng], 14);
-                            marker.setLatLng([lat, lng]);
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.log('No se pudo obtener información del código postal:', error);
-                });
-        }
-    });
-    
-    // Función para obtener dirección desde coordenadas
-    function getAddressFromCoordinates(lat, lng) {
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.address) {
-                    document.getElementById('postalCode').value = data.address.postcode || '';
-                    document.getElementById('state').value = data.address.state || '';
-                    document.getElementById('city').value = data.address.city || data.address.town || data.address.village || '';
-                    document.getElementById('neighborhood').value = data.address.suburb || data.address.neighbourhood || '';
+        const promesasBase64 = archivos.map(archivo => {
+            return new Promise((resolve, reject) => {
+                if (!['image/jpeg', 'image/png'].includes(archivo.type)) {
+                    reject('Formato no válido. Solo JPG/PNG');
+                    return;
                 }
+
+                const lector = new FileReader();
+                lector.onload = (e) => resolve({
+                    nombre: archivo.name,
+                    base64: e.target.result.split(',')[1],
+                    tipo: archivo.type
+                });
+                lector.onerror = () => reject('Error al leer archivo');
+                lector.readAsDataURL(archivo);
+            });
+        });
+
+        Promise.all(promesasBase64)
+            .then(imagenes => {
+                inputFotosBase64.value = JSON.stringify(imagenes);
+                mostrarPrevisualizaciones(imagenes);
             })
             .catch(error => {
-                console.log('Error al obtener dirección:', error);
+                mostrarAlerta(error);
+                inputFotos.value = '';
             });
-    }
-    
-    // Envío del formulario
-    document.getElementById('lostDogForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Aquí iría la lógica para enviar los datos al servidor
-        alert('Reporte enviado correctamente. ¡Gracias por tu ayuda!');
-        // this.submit(); // Descomentar para enviar realmente el formulario
     });
-    
-    // Navegación entre pasos
-    nextBtn.addEventListener('click', function() {
-        if (validateStep(currentStep)) {
-            currentStep++;
-            showStep(currentStep);
+
+    function mostrarMensajeSinFotos() {
+        previsualizacionFotos.innerHTML = '<p class="no-photos-message">No hay fotos seleccionadas</p>';
+        inputFotosBase64.value = '';
+    }
+
+    function mostrarPrevisualizaciones(imagenes) {
+        previsualizacionFotos.innerHTML = '';
+        
+        imagenes.forEach((img, indice) => {
+            const contenedor = document.createElement('div');
+            contenedor.className = 'photo-container';
+            
+            const imgElement = document.createElement('img');
+            imgElement.src = `data:${img.tipo};base64,${img.base64}`;
+            imgElement.alt = `Foto ${indice + 1}`;
+            
+            const botonEliminar = document.createElement('button');
+            botonEliminar.className = 'delete-photo-btn';
+            botonEliminar.innerHTML = '&times;';
+            botonEliminar.onclick = (e) => {
+                e.stopPropagation();
+                eliminarFoto(indice);
+            };
+            
+            contenedor.appendChild(imgElement);
+            contenedor.appendChild(botonEliminar);
+            previsualizacionFotos.appendChild(contenedor);
+        });
+    }
+
+    function eliminarFoto(indice) {
+        const nuevosArchivos = Array.from(inputFotos.files);
+        nuevosArchivos.splice(indice, 1);
+        
+        const dataTransfer = new DataTransfer();
+        nuevosArchivos.forEach(archivo => dataTransfer.items.add(archivo));
+        inputFotos.files = dataTransfer.files;
+        
+        const eventoChange = new Event('change');
+        inputFotos.dispatchEvent(eventoChange);
+    }
+
+    // ========== CONFIGURACIÓN DEL MAPA Y DIRECCIÓN ==========
+    const map = L.map('map').setView([19.4326, -99.1332], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    const marker = L.marker([19.4326, -99.1332], { 
+        draggable: true,
+        autoPan: true
+    }).addTo(map);
+
+    // Elementos del formulario
+    const cpInput = document.getElementById('codigo_postal');
+    const estadoInput = document.getElementById('estado');
+    const ciudadInput = document.getElementById('ciudad');
+    const coloniaSelect = document.getElementById('colonia');
+    const calleInput = document.getElementById('calle');
+    const numExtInput = document.getElementById('numero_exterior');
+    const latInput = document.getElementById('latitud');
+    const lngInput = document.getElementById('longitud');
+
+    // Cache para códigos postales
+    const cpCache = {};
+
+    // Event Listeners
+    cpInput.addEventListener('input', () => {
+        const cp = cpInput.value.trim();
+        if (cp.length === 5 && /^\d+$/.test(cp)) {
+            buscarPorCodigoPostal(cp);
         }
     });
-    
-    prevBtn.addEventListener('click', function() {
-        currentStep--;
-        showStep(currentStep);
+
+    marker.on('dragend', e => {
+        actualizarDesdeCoordenadas(e.target.getLatLng());
     });
-    
-    // Mostrar el primer paso al cargar
-    showStep(0);
+
+    map.on('click', e => {
+        marker.setLatLng(e.latlng);
+        actualizarDesdeCoordenadas(e.latlng);
+    });
+
+    async function buscarPorCodigoPostal(cp) {
+        if (cpCache[cp]) {
+            llenarDatosDireccion(cpCache[cp]);
+            return;
+        }
+
+        try {
+            const res = await fetch(`https://sepomex.icalialabs.com/api/v1/zip_codes?zip_code=${cp}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            
+            const data = await res.json();
+            cpCache[cp] = data.zip_codes;
+            
+            llenarDatosDireccion(data.zip_codes);
+            centrarMapaEnCP(data.zip_codes[0]);
+        } catch (error) {
+            console.error('Error al buscar CP:', error);
+            mostrarAlerta('No se encontraron datos para este código postal');
+        }
+    }
+
+    function llenarDatosDireccion(datos) {
+        if (!datos?.length) {
+            mostrarAlerta('No se encontraron datos para este código postal');
+            return;
+        }
+        estadoInput.value = datos[0].d_estado || '';
+        ciudadInput.value = datos[0].d_mnpio || '';
+        coloniaSelect.innerHTML = '';
+        
+        if (datos.length === 1) {
+            agregarOpcionColonia(datos[0]);
+        } else {
+            coloniaSelect.appendChild(crearOpcionDefault());
+            datos.sort((a, b) => a.d_asenta.localeCompare(b.d_asenta))
+                 .forEach(agregarOpcionColonia);
+        }
+        coloniaSelect.disabled = false;
+    }
+
+    function agregarOpcionColonia(item) {
+        const option = document.createElement('option');
+        option.value = item.d_asenta;
+        option.textContent = `${item.d_asenta} (${item.d_tipo_asenta})`;
+        coloniaSelect.appendChild(option);
+    }
+
+    function crearOpcionDefault() {
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = '-- Selecciona una colonia --';
+        option.selected = true;
+        return option;
+    }
+
+    async function centrarMapaEnCP(datoCP) {
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?city=${datoCP.d_mnpio}&state=${datoCP.d_estado}&country=México&format=json`);
+            const data = await res.json();
+            
+            if (data.length > 0) {
+                const { lat, lon } = data[0];
+                map.setView([lat, lon], 16);
+                marker.setLatLng([lat, lon]);
+                latInput.value = lat;
+                lngInput.value = lon;
+            }
+        } catch (error) {
+            console.error('Error al centrar mapa:', error);
+        }
+    }
+
+    async function actualizarDesdeCoordenadas({ lat, lng }) {
+        latInput.value = lat.toFixed(6);
+        lngInput.value = lng.toFixed(6);
+        
+        try {
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
+            const data = await res.json();
+            const addr = data.address || {};
+            
+            if (addr.postcode && addr.postcode !== cpInput.value) {
+                cpInput.value = addr.postcode;
+                buscarPorCodigoPostal(addr.postcode);
+            }
+            
+            estadoInput.value = addr.state || '';
+            ciudadInput.value = addr.city || addr.town || '';
+            
+            if (!coloniaSelect.value && (addr.suburb || addr.neighbourhood)) {
+                coloniaSelect.value = addr.suburb || addr.neighbourhood;
+            }
+            
+            calleInput.value = addr.road || '';
+            numExtInput.value = addr.house_number || '';
+        } catch (error) {
+            console.error('Error en geocodificación inversa:', error);
+        }
+    }
+
+    // ========== CONTADOR DE CARACTERES ==========
+    const textareaDescripcion = document.getElementById('descripcion');
+    const contadorDescripcion = document.getElementById('descCounter');
+    textareaDescripcion.addEventListener('input', function() {
+        contadorDescripcion.textContent = this.value.length;
+        actualizarColorContador(contadorDescripcion, this.value.length);
+    });
+
+    const textareaSalud = document.getElementById('problemas_salud');
+    const contadorSalud = document.getElementById('healthCounter');
+
+    textareaSalud.addEventListener('input', function() {
+        contadorSalud.textContent = this.value.length;
+        actualizarColorContador(contadorSalud, this.value.length);
+    });
+
+    function actualizarColorContador(elemento, longitud) {
+        if (longitud > 250) {
+            elemento.style.color = '#ff4444';
+        } else if (longitud > 200) {
+            elemento.style.color = '#ff9900';
+        } else {
+            elemento.style.color = '#666';
+        }
+    }
+
+    // ========== NAVEGACIÓN ==========
+    botonSiguiente.addEventListener('click', () => {
+        if (validarPaso(pasoActual)) {
+            pasoActual++;
+            mostrarPaso(pasoActual);
+        }
+    });
+
+    botonAnterior.addEventListener('click', () => {
+        pasoActual--;
+        mostrarPaso(pasoActual);
+    });
+
+
+    // ========= ENVÍO DEL FORMULARIO =========
+    document.getElementById('lostDogForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const fechaHoraCombinada = combinarFechaHora();
+        if (!fechaHoraCombinada) {
+            mostrarAlerta('Por favor completa fecha y hora');
+            return;
+        }
+
+        const formData = new FormData(this);
+        formData.delete('fecha_perdida');
+        formData.delete('hora_perdida');
+        formData.append('fecha_hora_perdida', fechaHoraCombinada);
+
+        const fotosBase64 = document.getElementById('dogPhotosBase64').value;
+        if (fotosBase64) {
+            formData.delete('dogPhotos');
+            formData.append('dogPhotosBase64', fotosBase64);
+        }
+
+        fetch('/perros/registrar/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('modalExito').style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = "{% url 'home' %}";
+                    }, 3000);
+                } else if (data.errors) {
+                    Object.entries(data.errors)
+                        .forEach(([campo, errores]) =>
+                            errores.forEach(err => mostrarAlerta(`${campo}: ${err.message}`)));
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                mostrarAlerta('Error al enviar el formulario');
+            });
+    });
+
+    // ========== INICIALIZACIÓN ==========
+    mostrarPaso(0);
+    mostrarMensajeSinFotos();
 });
