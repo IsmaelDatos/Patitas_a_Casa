@@ -18,12 +18,12 @@
 <ol>
 	<li>
 		<p><b>PASO 1:</b> Instala Python3; puedes instalarlo desde terminal tal que:</p>
-		<p>Si el sistema es basado en Debian (como Ubuntu):</p>
+		<p><b>Si el sistema es basado en Debian (como Ubuntu):</b></p>
 		<p style = "text-align: center;">$ sudo apt update</p>
 		<p style = "text-align: center;">$ sudo apt upgrade</p>
 		<p style = "text-align: center;">$ sudo apt install python3</p>
 		<p style = "text-align: center;">$ python3 --version // Verifica que se instaló</p>
-		<p>Si el sistema es basado en Red Hat (como Fedora):</p>
+		<p><b>Si el sistema es basado en Red Hat (como Fedora):</b></p>
 		<p style = "text-align: center;">$ sudo dnf update // puedes cambiar dnf por yum</p>
 		<p style = "text-align: center;">$ sudo dnf upgrade</p>
 		<p style = "text-align: center;">$ sudo dnf install python3</p>
@@ -31,19 +31,19 @@
 	</li>
 	<li>
 		<p><b>PASO 2:</b> Instala Python3-pip; puedes instalarlo desde terminal tal que:</p>
-		<p>Si el sistema es basado en Debian (como Ubuntu):</p>
+		<p><b>Si el sistema es basado en Debian (como Ubuntu):</b></p>
 		<p style = "text-align: center;">$ sudo apt install python3-pip</p>
-		<p>Si el sistema es basado en Red Hat (como Fedora):</p>
+		<p><b>Si el sistema es basado en Red Hat (como Fedora):</b></p>
 		<p style = "text-align: center;">$ sudo dnf install python3-pip // puedes cambiar dnf por yum</p>
 	</li>
 	<li>
 		<p><b>PASO 3:</b> Instala postgresql; puedes instalarlo desde terminal tal que:</p>
-		<p>Si el sistema es basado en Debian (como Ubuntu):</p>
+		<p><b>Si el sistema es basado en Debian (como Ubuntu):</b></p>
 		<p style = "text-align: center;">$ sudo apt update</p>
 		<p style = "text-align: center;">$ sudo apt upgrade</p>
 		<p style = "text-align: center;">$ sudo apt install postgresql</p>
 		<p style = "text-align: center;">$ psql --version // Verifica que se instaló</p>
-		<p>Si el sistema es basado en Red Hat (como Fedora):</p>
+		<p><b>Si el sistema es basado en Red Hat (como Fedora):</b></p>
 		<p style = "text-align: center;">$ sudo dnf update // puedes cambiar dnf por yum</p>
 		<p style = "text-align: center;">$ sudo dnf upgrade</p>
 		<p style = "text-align: center;">$ sudo dnf install postgresql-server postgresql-contrib</p>
